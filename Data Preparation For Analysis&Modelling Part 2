@@ -1,0 +1,1937 @@
+DATA PREPARATION PART-2
+Asutosh Dash
+
+October 2, 2015
+
+SETTING A REPOSITORY
+
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+SETTING DIRECTORY AND IMPORTING DATA
+
+#SETTING DIRECTORY
+setwd(choose.dir())
+
+#Import data into R Studio
+cust_data<-read.csv(choose.files(),header=T)#A DATASET WITH 149902 OBSERVATIONS AND 10 VARIABLES
+
+cust_demo<-read.csv(choose.files(),header=T)#DATASET WITH 149956 OBSERVATIONS AND 8 VARIABLES
+EXPLORING & UNDERSTANDING THE DATA
+
+View(cust_data)
+head(cust_data)
+##       ID SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD
+## 1  83236                0           0.31172582               0
+## 2   2503                0           0.12498758               0
+## 3 137013                0           0.06025825               0
+## 4  51306                0           0.06432189               0
+## 5  71937                0           0.21118558               0
+## 6  89149                0           0.05659897               0
+##      DebtRatio MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD
+## 1 2.964090e-01         11500                    12            0
+## 2 1.159032e-01         14166                    13            0
+## 3 5.151470e-01          6733                     7            0
+## 4 1.651273e-01         13316                    10            0
+## 5 2.228303e-02          2557                     3            0
+## 6 1.482000e+03          #N/A                     5            0
+##   No_of_RealEstateLoans No_of_60_89_DPD
+## 1                     3               0
+## 2                     1               0
+## 3                     3               0
+## 4                     1               0
+## 5                     0               0
+## 6                     1               0
+tail(cust_data)
+##            ID SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD
+## 149897 132378                0           0.20151939               0
+## 149898 148580                1           0.99999990               1
+## 149899  93517                0           0.16386430               0
+## 149900  15481                0           0.03173178               0
+## 149901  50464                0           0.07804983               0
+## 149902  75766                0           0.07582279               0
+##          DebtRatio MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD
+## 149897 0.008121278          3693                     2            0
+## 149898 0.021124104          2650                     0            0
+## 149899 1.276107998          1962                     9            0
+## 149900 0.260057902         10016                    12            0
+## 149901 0.569960023          1750                    10            0
+## 149902 0.182162729         12400                     3            0
+##        No_of_RealEstateLoans No_of_60_89_DPD
+## 149897                     0               0
+## 149898                     0               1
+## 149899                     1               0
+## 149900                     1               0
+## 149901                     2               0
+## 149902                     1               0
+str(cust_data)
+## 'data.frame':    149902 obs. of  10 variables:
+##  $ ID                   : int  83236 2503 137013 51306 71937 89149 140279 123541 47756 112237 ...
+##  $ SeriousDlqin2yrs     : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.3117 0.125 0.0603 0.0643 0.2112 ...
+##  $ No_of_30_59_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.2964 0.1159 0.5151 0.1651 0.0223 ...
+##  $ MonthlyIncome        : Factor w/ 13591 levels "#N/A","0","1",..: 1255 2860 10346 2429 5593 1 8455 10634 1479 1 ...
+##  $ No_Of_OpenCreditLines: int  12 13 7 10 3 5 5 13 3 10 ...
+##  $ No_of_90_DPD         : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  3 1 3 1 0 1 0 1 1 0 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+ncol(cust_data)
+## [1] 10
+nrow(cust_data)
+## [1] 149902
+names(cust_data)
+##  [1] "ID"                    "SeriousDlqin2yrs"     
+##  [3] "RevolvingUtilization"  "No_of_30_59_DPD"      
+##  [5] "DebtRatio"             "MonthlyIncome"        
+##  [7] "No_Of_OpenCreditLines" "No_of_90_DPD"         
+##  [9] "No_of_RealEstateLoans" "No_of_60_89_DPD"
+summary(cust_data)
+##        ID         SeriousDlqin2yrs  RevolvingUtilization No_of_30_59_DPD 
+##  Min.   :     1   Min.   :0.00000   Min.   :    0.00     Min.   : 0.000  
+##  1st Qu.: 37502   1st Qu.:0.00000   1st Qu.:    0.03     1st Qu.: 0.000  
+##  Median : 74997   Median :0.00000   Median :    0.15     Median : 0.000  
+##  Mean   : 74997   Mean   :0.06683   Mean   :    6.05     Mean   : 0.421  
+##  3rd Qu.:112490   3rd Qu.:0.00000   3rd Qu.:    0.56     3rd Qu.: 0.000  
+##  Max.   :150000   Max.   :1.00000   Max.   :50708.00     Max.   :98.000  
+##                                                                          
+##    DebtRatio        MonthlyIncome    No_Of_OpenCreditLines
+##  Min.   :     0.0   #N/A   : 29711   Min.   : 0.000       
+##  1st Qu.:     0.2   5000   :  2755   1st Qu.: 5.000       
+##  Median :     0.4   4000   :  2104   Median : 8.000       
+##  Mean   :   353.1   6000   :  1932   Mean   : 8.453       
+##  3rd Qu.:     0.9   3000   :  1757   3rd Qu.:11.000       
+##  Max.   :329664.0   0      :  1632   Max.   :58.000       
+##                     (Other):110011                        
+##   No_of_90_DPD     No_of_RealEstateLoans No_of_60_89_DPD  
+##  Min.   : 0.0000   Min.   : 0.000        Min.   : 0.0000  
+##  1st Qu.: 0.0000   1st Qu.: 0.000        1st Qu.: 0.0000  
+##  Median : 0.0000   Median : 1.000        Median : 0.0000  
+##  Mean   : 0.2661   Mean   : 1.018        Mean   : 0.2405  
+##  3rd Qu.: 0.0000   3rd Qu.: 2.000        3rd Qu.: 0.0000  
+##  Max.   :98.0000   Max.   :54.000        Max.   :98.0000  
+## 
+sum(duplicated(cust_data))
+## [1] 0
+require(psych)
+## Loading required package: psych
+describe(cust_data)
+##                       vars      n     mean       sd   median  trimmed
+## ID                       1 149902 74997.34 43299.68 74996.50 74996.88
+## SeriousDlqin2yrs         2 149902     0.07     0.25     0.00     0.00
+## RevolvingUtilization     3 149902     6.05   249.84     0.15     0.27
+## No_of_30_59_DPD          4 149902     0.42     4.19     0.00     0.07
+## DebtRatio                5 149902   353.06  2038.41     0.37    51.65
+## MonthlyIncome*           6 149902  5797.15  4290.82  6482.00  5696.77
+## No_Of_OpenCreditLines    7 149902     8.45     5.15     8.00     7.96
+## No_of_90_DPD             8 149902     0.27     4.17     0.00     0.00
+## No_of_RealEstateLoans    9 149902     1.02     1.13     1.00     0.88
+## No_of_60_89_DPD         10 149902     0.24     4.16     0.00     0.00
+##                            mad min    max  range  skew kurtosis     se
+## ID                    55588.60   1 150000 149999  0.00    -1.20 111.84
+## SeriousDlqin2yrs          0.00   0      1      1  3.47    10.03   0.00
+## RevolvingUtilization      0.22   0  50708  50708 97.60 14534.53   0.65
+## No_of_30_59_DPD           0.00   0     98     98 22.59   522.05   0.01
+## DebtRatio                 0.36   0 329664 329664 95.14 13726.68   5.26
+## MonthlyIncome*         5390.73   1  13591  13590 -0.08    -1.31  11.08
+## No_Of_OpenCreditLines     4.45   0     58     58  1.22     3.09   0.01
+## No_of_90_DPD              0.00   0     98     98 23.08   537.37   0.01
+## No_of_RealEstateLoans     1.48   0     54     54  3.48    60.50   0.00
+## No_of_60_89_DPD           0.00   0     98     98 23.32   545.30   0.01
+MERGING DATA SETS
+
+#Merge Two datasets using left join
+customer_360<-merge(cust_data,cust_demo,by="ID",all.x=T)
+all_customers <- customer_360
+CONVERSION OF VARIABLES AND RECODING #N/A TO NA
+
+customer_360$NumberOfDependents[customer_360$NumberOfDependents=="#N/A"]<-NA
+
+customer_360$MonthlyIncome[customer_360$MonthlyIncome=="#N/A"]<-NA
+
+customer_360$NumberOfDependents<-as.numeric(customer_360$NumberOfDependents)
+
+customer_360$MonthlyIncome<-as.numeric(customer_360$MonthlyIncome)
+
+str(customer_360)
+## 'data.frame':    149902 obs. of  17 variables:
+##  $ ID                   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ SeriousDlqin2yrs     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.766 0.957 0.658 0.234 0.907 ...
+##  $ No_of_30_59_DPD      : int  2 0 1 0 1 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.803 0.1219 0.0851 0.036 0.0249 ...
+##  $ MonthlyIncome        : num  12783 5652 6220 6527 9948 ...
+##  $ No_Of_OpenCreditLines: int  13 4 2 5 7 3 8 8 2 9 ...
+##  $ No_of_90_DPD         : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 0 0 0 1 1 3 0 0 4 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Location             : Factor w/ 28 levels "Agartala,Tripura",..: 12 14 9 22 23 21 10 6 26 27 ...
+##  $ Gender               : int  1 0 0 0 1 1 1 0 0 0 ...
+##  $ age                  : int  45 40 38 30 49 74 57 39 27 57 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 1 2 1 2 ...
+##  $ NumberOfDependents   : num  6 3 2 2 2 3 2 2 NA 6 ...
+##  $ Own_House            : int  0 1 0 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 2 3 1 3 3 2 2 2 2 ...
+#USING TRANSFORM
+customer_360_1 <- transform(customer_360,NumberOfDependents = as.numeric(NumberOfDependents),
+          MonthlyIncome = as.numeric(MonthlyIncome))
+
+str(customer_360_1)
+## 'data.frame':    149902 obs. of  17 variables:
+##  $ ID                   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ SeriousDlqin2yrs     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.766 0.957 0.658 0.234 0.907 ...
+##  $ No_of_30_59_DPD      : int  2 0 1 0 1 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.803 0.1219 0.0851 0.036 0.0249 ...
+##  $ MonthlyIncome        : num  12783 5652 6220 6527 9948 ...
+##  $ No_Of_OpenCreditLines: int  13 4 2 5 7 3 8 8 2 9 ...
+##  $ No_of_90_DPD         : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 0 0 0 1 1 3 0 0 4 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Location             : Factor w/ 28 levels "Agartala,Tripura",..: 12 14 9 22 23 21 10 6 26 27 ...
+##  $ Gender               : int  1 0 0 0 1 1 1 0 0 0 ...
+##  $ age                  : int  45 40 38 30 49 74 57 39 27 57 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 1 2 1 2 ...
+##  $ NumberOfDependents   : num  6 3 2 2 2 3 2 2 NA 6 ...
+##  $ Own_House            : int  0 1 0 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 2 3 1 3 3 2 2 2 2 ...
+CREATING NEW VARIABLE USING CONDITION
+
+brks <- with(customer_360, quantile(MonthlyIncome, probs = c(0, 0.2, 0.4, 0.6, 0.8, 1),na.rm=T))
+
+customer_360$quantile<-with(customer_360,cut(customer_360$MonthlyIncome,brks))
+
+customer_360$quantile<-factor(customer_360$quantile,labels=c("0-20","20-40","40-60","60-80","80-100"))
+head(customer_360,n=10)
+##    ID SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD    DebtRatio
+## 1   1                1            0.7661266               2 8.029821e-01
+## 2   2                0            0.9571510               0 1.218762e-01
+## 3   3                0            0.6581801               1 8.511338e-02
+## 4   4                0            0.2338098               0 3.604968e-02
+## 5   5                0            0.9072394               1 2.492570e-02
+## 6   6                0            0.2131787               0 3.756070e-01
+## 7   7                0            0.3056825               0 5.710000e+03
+## 8   8                0            0.7544636               0 2.099400e-01
+## 9   9                0            0.1169506               0 4.600000e+01
+## 10 10                0            0.1891691               0 6.062909e-01
+##    MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD No_of_RealEstateLoans
+## 1          12783                    13            0                     6
+## 2           5652                     4            0                     0
+## 3           6220                     2            1                     0
+## 4           6527                     5            0                     0
+## 5           9948                     7            0                     1
+## 6           6769                     3            0                     1
+## 7             NA                     8            0                     3
+## 8           6769                     8            0                     0
+## 9             NA                     2            0                     0
+## 10          5320                     9            0                     4
+##    No_of_60_89_DPD                   Location Gender age Martial_Status
+## 1                0   Hyderabad,Andhra Pradesh      1  45         Single
+## 2                0 Itanagar,Arunachal Pradesh      0  40        Married
+## 3                0               Dispur,Assam      0  38         Single
+## 4                0                Patna,Bihar      0  30         Single
+## 5                0        Raipur,Chhattisgarh      1  49         Single
+## 6                0                 Panjim,Goa      1  74         Single
+## 7                0        Gandhinagar,Gujarat      1  57        Married
+## 8                0         Chandigarh,Haryana      0  39         Single
+## 9                0    Shimla,Himachal Pradesh      0  27        Married
+## 10               0                Srinagar,JK      0  57         Single
+##    NumberOfDependents Own_House No_Years_address quantile
+## 1                   6         0                2   80-100
+## 2                   3         1                2    20-40
+## 3                   2         0                3    20-40
+## 4                   2         1                1    20-40
+## 5                   2         1                3    60-80
+## 6                   3         1                3    40-60
+## 7                   2         0                2     <NA>
+## 8                   2         0                2    40-60
+## 9                  NA         0                2     <NA>
+## 10                  6         0                2    20-40
+names(customer_360)
+##  [1] "ID"                    "SeriousDlqin2yrs"     
+##  [3] "RevolvingUtilization"  "No_of_30_59_DPD"      
+##  [5] "DebtRatio"             "MonthlyIncome"        
+##  [7] "No_Of_OpenCreditLines" "No_of_90_DPD"         
+##  [9] "No_of_RealEstateLoans" "No_of_60_89_DPD"      
+## [11] "Location"              "Gender"               
+## [13] "age"                   "Martial_Status"       
+## [15] "NumberOfDependents"    "Own_House"            
+## [17] "No_Years_address"      "quantile"
+#CREATE NEW VARIABLE FROM INCOME
+attach(customer_360)
+customer_360$Income_segment[customer_360$quantile=="80-100"]<-"Prime Customers"
+customer_360$Income_segment[customer_360$quantile=="60-80"]<-"High value customers"
+customer_360$Income_segment[customer_360$quantile=="40-60"]<-"Medium Value customers"
+customer_360$Income_segment[customer_360$quantile=="20-40"]<-"Low Value customers"
+customer_360$Income_segment[customer_360$quantile=="0-20"]<-"Very Low Value customers"
+detach(customer_360)
+
+#CREATE NEW VARIABLE FROM AGE 
+attach(customer_360)
+customer_360$Life_stage_Segment[customer_360$age>60]<-"Retired"
+customer_360$Life_stage_Segment[customer_360$age>40 & customer_360$age<=60]<-"Pre_retired"
+customer_360$Life_stage_Segment[customer_360$age>27 & customer_360$age<=40]<-"Married_with_youngKids"
+customer_360$Life_stage_Segment[customer_360$age>=23 & customer_360$age<=27]<-"UnMarried_employed"
+customer_360$Life_stage_Segment[customer_360$age<22]<-"Student"
+detach(customer_360)
+
+names(customer_360)
+##  [1] "ID"                    "SeriousDlqin2yrs"     
+##  [3] "RevolvingUtilization"  "No_of_30_59_DPD"      
+##  [5] "DebtRatio"             "MonthlyIncome"        
+##  [7] "No_Of_OpenCreditLines" "No_of_90_DPD"         
+##  [9] "No_of_RealEstateLoans" "No_of_60_89_DPD"      
+## [11] "Location"              "Gender"               
+## [13] "age"                   "Martial_Status"       
+## [15] "NumberOfDependents"    "Own_House"            
+## [17] "No_Years_address"      "quantile"             
+## [19] "Income_segment"        "Life_stage_Segment"
+str(customer_360)
+## 'data.frame':    149902 obs. of  20 variables:
+##  $ ID                   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ SeriousDlqin2yrs     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.766 0.957 0.658 0.234 0.907 ...
+##  $ No_of_30_59_DPD      : int  2 0 1 0 1 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.803 0.1219 0.0851 0.036 0.0249 ...
+##  $ MonthlyIncome        : num  12783 5652 6220 6527 9948 ...
+##  $ No_Of_OpenCreditLines: int  13 4 2 5 7 3 8 8 2 9 ...
+##  $ No_of_90_DPD         : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 0 0 0 1 1 3 0 0 4 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Location             : Factor w/ 28 levels "Agartala,Tripura",..: 12 14 9 22 23 21 10 6 26 27 ...
+##  $ Gender               : int  1 0 0 0 1 1 1 0 0 0 ...
+##  $ age                  : int  45 40 38 30 49 74 57 39 27 57 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 1 2 1 2 ...
+##  $ NumberOfDependents   : num  6 3 2 2 2 3 2 2 NA 6 ...
+##  $ Own_House            : int  0 1 0 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 2 3 1 3 3 2 2 2 2 ...
+##  $ quantile             : Factor w/ 5 levels "0-20","20-40",..: 5 2 2 2 4 3 NA 3 NA 2 ...
+##  $ Income_segment       : chr  "Prime Customers" "Low Value customers" "Low Value customers" "Low Value customers" ...
+##  $ Life_stage_Segment   : chr  "Pre_retired" "Married_with_youngKids" "Married_with_youngKids" "Married_with_youngKids" ...
+SPLITTING A COLUMN BY SEPARATOR
+
+#Split Location into City and State
+#install.packages("reshape2")
+require(reshape2)
+## Loading required package: reshape2
+customer_location_list<-colsplit(customer_360$Location,",",c("City","State"))
+customer_360<-cbind(customer_360,customer_location_list)
+customer_360=subset(customer_360,select=-c(Location))
+
+names(customer_360)
+##  [1] "ID"                    "SeriousDlqin2yrs"     
+##  [3] "RevolvingUtilization"  "No_of_30_59_DPD"      
+##  [5] "DebtRatio"             "MonthlyIncome"        
+##  [7] "No_Of_OpenCreditLines" "No_of_90_DPD"         
+##  [9] "No_of_RealEstateLoans" "No_of_60_89_DPD"      
+## [11] "Gender"                "age"                  
+## [13] "Martial_Status"        "NumberOfDependents"   
+## [15] "Own_House"             "No_Years_address"     
+## [17] "quantile"              "Income_segment"       
+## [19] "Life_stage_Segment"    "City"                 
+## [21] "State"
+str(customer_360)
+## 'data.frame':    149902 obs. of  21 variables:
+##  $ ID                   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ SeriousDlqin2yrs     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.766 0.957 0.658 0.234 0.907 ...
+##  $ No_of_30_59_DPD      : int  2 0 1 0 1 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.803 0.1219 0.0851 0.036 0.0249 ...
+##  $ MonthlyIncome        : num  12783 5652 6220 6527 9948 ...
+##  $ No_Of_OpenCreditLines: int  13 4 2 5 7 3 8 8 2 9 ...
+##  $ No_of_90_DPD         : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 0 0 0 1 1 3 0 0 4 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Gender               : int  1 0 0 0 1 1 1 0 0 0 ...
+##  $ age                  : int  45 40 38 30 49 74 57 39 27 57 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 1 2 1 2 ...
+##  $ NumberOfDependents   : num  6 3 2 2 2 3 2 2 NA 6 ...
+##  $ Own_House            : int  0 1 0 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 2 3 1 3 3 2 2 2 2 ...
+##  $ quantile             : Factor w/ 5 levels "0-20","20-40",..: 5 2 2 2 4 3 NA 3 NA 2 ...
+##  $ Income_segment       : chr  "Prime Customers" "Low Value customers" "Low Value customers" "Low Value customers" ...
+##  $ Life_stage_Segment   : chr  "Pre_retired" "Married_with_youngKids" "Married_with_youngKids" "Married_with_youngKids" ...
+##  $ City                 : chr  "Hyderabad" "Itanagar" "Dispur" "Patna" ...
+##  $ State                : chr  "Andhra Pradesh" "Arunachal Pradesh" "Assam" "Bihar" ...
+#ANOTHER METHOD USING separate{tidyr}
+
+#install.packages("tidyr")
+require(tidyr)
+## Loading required package: tidyr
+all_customers <- separate(all_customers,col = Location,into = c("city","state"),sep = ",")
+
+names(all_customers)
+##  [1] "ID"                    "SeriousDlqin2yrs"     
+##  [3] "RevolvingUtilization"  "No_of_30_59_DPD"      
+##  [5] "DebtRatio"             "MonthlyIncome"        
+##  [7] "No_Of_OpenCreditLines" "No_of_90_DPD"         
+##  [9] "No_of_RealEstateLoans" "No_of_60_89_DPD"      
+## [11] "city"                  "state"                
+## [13] "Gender"                "age"                  
+## [15] "Martial_Status"        "NumberOfDependents"   
+## [17] "Own_House"             "No_Years_address"
+str(all_customers)
+## 'data.frame':    149902 obs. of  18 variables:
+##  $ ID                   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ SeriousDlqin2yrs     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ RevolvingUtilization : num  0.766 0.957 0.658 0.234 0.907 ...
+##  $ No_of_30_59_DPD      : int  2 0 1 0 1 0 0 0 0 0 ...
+##  $ DebtRatio            : num  0.803 0.1219 0.0851 0.036 0.0249 ...
+##  $ MonthlyIncome        : Factor w/ 13591 levels "#N/A","0","1",..: 12783 5652 6220 6527 9948 6769 1 6769 1 5320 ...
+##  $ No_Of_OpenCreditLines: int  13 4 2 5 7 3 8 8 2 9 ...
+##  $ No_of_90_DPD         : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 0 0 0 1 1 3 0 0 4 ...
+##  $ No_of_60_89_DPD      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ city                 : chr  "Hyderabad" "Itanagar" "Dispur" "Patna" ...
+##  $ state                : chr  "Andhra Pradesh" "Arunachal Pradesh" "Assam" "Bihar" ...
+##  $ Gender               : int  1 0 0 0 1 1 1 0 0 0 ...
+##  $ age                  : int  45 40 38 30 49 74 57 39 27 57 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 1 2 1 2 ...
+##  $ NumberOfDependents   : Factor w/ 14 levels "#N/A","0","1",..: 6 3 2 2 2 3 2 2 1 6 ...
+##  $ Own_House            : int  0 1 0 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 2 3 1 3 3 2 2 2 2 ...
+SUBSETTING DATA BASED ON A VARIABLE CONDITION
+
+#Subsetting the data
+
+delinquent_cust<-subset(customer_360,SeriousDlqin2yrs==1)
+str(delinquent_cust)
+## 'data.frame':    10018 obs. of  21 variables:
+##  $ ID                   : int  1 14 22 26 52 75 89 163 180 185 ...
+##  $ SeriousDlqin2yrs     : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ RevolvingUtilization : num  0.7661 0.9647 0.0257 0.3922 0.7282 ...
+##  $ No_of_30_59_DPD      : int  2 3 0 0 0 1 0 1 0 0 ...
+##  $ DebtRatio            : num  0.803 0.383 0.476 1.595 0.825 ...
+##  $ MonthlyIncome        : num  12783 2641 6162 8110 6162 ...
+##  $ No_Of_OpenCreditLines: int  13 9 7 14 10 9 13 6 6 11 ...
+##  $ No_of_90_DPD         : int  0 3 0 0 0 0 0 0 0 0 ...
+##  $ No_of_RealEstateLoans: int  6 1 1 3 2 2 2 2 1 1 ...
+##  $ No_of_60_89_DPD      : int  0 1 0 0 0 0 0 0 0 0 ...
+##  $ Gender               : int  1 1 0 0 0 1 1 1 1 1 ...
+##  $ age                  : int  45 40 38 50 31 49 45 47 35 51 ...
+##  $ Martial_Status       : Factor w/ 2 levels "Married","Single": 2 1 2 2 2 2 2 1 2 2 ...
+##  $ NumberOfDependents   : num  6 6 6 3 3 8 6 3 3 2 ...
+##  $ Own_House            : int  0 1 1 1 1 1 0 0 0 0 ...
+##  $ No_Years_address     : int  2 3 3 2 2 2 1 2 2 1 ...
+##  $ quantile             : Factor w/ 5 levels "0-20","20-40",..: 5 1 2 3 2 1 3 4 NA 4 ...
+##  $ Income_segment       : chr  "Prime Customers" "Very Low Value customers" "Low Value customers" "Medium Value customers" ...
+##  $ Life_stage_Segment   : chr  "Pre_retired" "Married_with_youngKids" "Married_with_youngKids" "Pre_retired" ...
+##  $ City                 : chr  "Hyderabad" "Thiruvananthapuram" "Raipur" "Shimla" ...
+##  $ State                : chr  "Andhra Pradesh" "Kerala" "Chhattisgarh" "Himachal Pradesh" ...
+summary(delinquent_cust)
+##        ID         SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD 
+##  Min.   :     1   Min.   :1        Min.   :   0.000     Min.   : 0.000  
+##  1st Qu.: 38301   1st Qu.:1        1st Qu.:   0.398     1st Qu.: 0.000  
+##  Median : 75305   Median :1        Median :   0.839     Median : 0.000  
+##  Mean   : 75476   Mean   :1        Mean   :   4.370     Mean   : 2.389  
+##  3rd Qu.:112962   3rd Qu.:1        3rd Qu.:   1.000     3rd Qu.: 2.000  
+##  Max.   :149980   Max.   :1        Max.   :8328.000     Max.   :98.000  
+##                                                                         
+##    DebtRatio        MonthlyIncome   No_Of_OpenCreditLines  No_of_90_DPD   
+##  Min.   :    0.00   Min.   :    2   Min.   : 0.000        Min.   : 0.000  
+##  1st Qu.:    0.19   1st Qu.: 5460   1st Qu.: 4.000        1st Qu.: 0.000  
+##  Median :    0.43   Median : 7339   Median : 7.000        Median : 0.000  
+##  Mean   :  294.95   Mean   : 7181   Mean   : 7.881        Mean   : 2.093  
+##  3rd Qu.:    0.89   3rd Qu.: 9383   3rd Qu.:11.000        3rd Qu.: 1.000  
+##  Max.   :38793.00   Max.   :13587   Max.   :57.000        Max.   :98.000  
+##                     NA's   :1667                                          
+##  No_of_RealEstateLoans No_of_60_89_DPD      Gender            age        
+##  Min.   : 0.0000       Min.   : 0.000   Min.   :0.0000   Min.   : 21.00  
+##  1st Qu.: 0.0000       1st Qu.: 0.000   1st Qu.:0.0000   1st Qu.: 36.00  
+##  Median : 1.0000       Median : 0.000   Median :0.0000   Median : 45.00  
+##  Mean   : 0.9892       Mean   : 1.829   Mean   :0.3722   Mean   : 45.93  
+##  3rd Qu.: 2.0000       3rd Qu.: 1.000   3rd Qu.:1.0000   3rd Qu.: 54.00  
+##  Max.   :29.0000       Max.   :98.000   Max.   :1.0000   Max.   :101.00  
+##                                         NA's   :3        NA's   :3       
+##  Martial_Status NumberOfDependents   Own_House      No_Years_address
+##  Married:2881   Min.   : 2.000     Min.   :0.0000   Min.   :1.000   
+##  Single :7134   1st Qu.: 2.000     1st Qu.:0.0000   1st Qu.:1.000   
+##  NA's   :   3   Median : 2.000     Median :0.0000   Median :2.000   
+##                 Mean   : 3.647     Mean   :0.3957   Mean   :2.006   
+##                 3rd Qu.: 6.000     3rd Qu.:1.0000   3rd Qu.:3.000   
+##                 Max.   :13.000     Max.   :1.0000   Max.   :3.000   
+##                 NA's   :182        NA's   :3        NA's   :3       
+##    quantile    Income_segment     Life_stage_Segment     City          
+##  0-20  :1293   Length:10018       Length:10018       Length:10018      
+##  20-40 :2171   Class :character   Class :character   Class :character  
+##  40-60 :2014   Mode  :character   Mode  :character   Mode  :character  
+##  60-80 :1517                                                           
+##  80-100:1290                                                           
+##  NA's  :1733                                                           
+##                                                                        
+##     State          
+##  Length:10018      
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## 
+non_delinquent_cust<-subset(customer_360,SeriousDlqin2yrs==0)
+summary(non_delinquent_cust)
+##        ID         SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD  
+##  Min.   :     2   Min.   :0        Min.   :    0.00     Min.   : 0.0000  
+##  1st Qu.: 37451   1st Qu.:0        1st Qu.:    0.03     1st Qu.: 0.0000  
+##  Median : 74977   Median :0        Median :    0.13     Median : 0.0000  
+##  Mean   : 74963   Mean   :0        Mean   :    6.17     Mean   : 0.2801  
+##  3rd Qu.:112453   3rd Qu.:0        3rd Qu.:    0.49     3rd Qu.: 0.0000  
+##  Max.   :150000   Max.   :0        Max.   :50708.00     Max.   :98.0000  
+##                                                                          
+##    DebtRatio        MonthlyIncome   No_Of_OpenCreditLines
+##  Min.   :     0.0   Min.   :    2   Min.   : 0.000       
+##  1st Qu.:     0.2   1st Qu.: 5050   1st Qu.: 5.000       
+##  Median :     0.4   Median : 7561   Median : 8.000       
+##  Mean   :   357.2   Mean   : 7234   Mean   : 8.494       
+##  3rd Qu.:     0.9   3rd Qu.: 9919   3rd Qu.:11.000       
+##  Max.   :329664.0   Max.   :13591   Max.   :58.000       
+##                     NA's   :28044                        
+##   No_of_90_DPD     No_of_RealEstateLoans No_of_60_89_DPD  
+##  Min.   : 0.0000   Min.   : 0.00         Min.   : 0.0000  
+##  1st Qu.: 0.0000   1st Qu.: 0.00         1st Qu.: 0.0000  
+##  Median : 0.0000   Median : 1.00         Median : 0.0000  
+##  Mean   : 0.1353   Mean   : 1.02         Mean   : 0.1267  
+##  3rd Qu.: 0.0000   3rd Qu.: 2.00         3rd Qu.: 0.0000  
+##  Max.   :98.0000   Max.   :54.00         Max.   :98.0000  
+##                                                           
+##      Gender            age         Martial_Status  NumberOfDependents
+##  Min.   :0.0000   Min.   :  0.00   Married:39938   Min.   : 2.000    
+##  1st Qu.:0.0000   1st Qu.: 42.00   Single :99905   1st Qu.: 2.000    
+##  Median :0.0000   Median : 52.00   NA's   :   41   Median : 2.000    
+##  Mean   :0.3751   Mean   : 52.75                   Mean   : 3.272    
+##  3rd Qu.:1.0000   3rd Qu.: 63.00                   3rd Qu.: 3.000    
+##  Max.   :1.0000   Max.   :109.00                   Max.   :14.000    
+##  NA's   :41       NA's   :41                       NA's   :3783      
+##    Own_House      No_Years_address   quantile     Income_segment    
+##  Min.   :0.0000   Min.   :1.000    0-20  :21411   Length:139884     
+##  1st Qu.:0.0000   1st Qu.:1.000    20-40 :21570   Class :character  
+##  Median :0.0000   Median :2.000    40-60 :23643   Mode  :character  
+##  Mean   :0.3996   Mean   :2.002    60-80 :20911                     
+##  3rd Qu.:1.0000   3rd Qu.:3.000    80-100:22739                     
+##  Max.   :1.0000   Max.   :3.000    NA's  :29610                     
+##  NA's   :41       NA's   :41                                        
+##  Life_stage_Segment     City              State          
+##  Length:139884      Length:139884      Length:139884     
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+## 
+EXPORTING DATA SETS
+
+#EXPORT AS CSV FILES
+write.csv(delinquent_cust,"delinquent_cust.csv",row.names = F)
+write.csv(non_delinquent_cust,"non_delinquent_cust.csv",row.names = F)
+SORTING THE DATA
+
+#Sorting the data and getting top 50 Monthly Income
+
+newdata<-head(customer_360[order(customer_360$MonthlyIncome,decreasing = T),],50)
+
+View(newdata)
+newdata
+##            ID SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD
+## 1065     1066                0          0.987743331               0
+## 4491     4493                0          0.769780063               3
+## 38201   38227                0          0.148237640               0
+## 50210   50241                0          0.019692206               0
+## 67744   67785                0          0.053223981               0
+## 69620   69661                0          0.297675952               0
+## 78747   78793                0          0.263316873               0
+## 99285   99342                0          0.253719584               0
+## 121945 122019                0          0.063784966               0
+## 147431 147526                0          0.020465984               0
+## 20191   20206                0          0.078459124               0
+## 59817   59852                0          0.631909055               6
+## 121863 121937                0          0.550944906               0
+## 47544   47574                0          0.340367909               1
+## 64973   65011                0          0.248932314               1
+## 78666   78712                0          0.001532715               0
+## 83986   84035                0          0.073004774               0
+## 17040   17052                1          0.673345907               0
+## 108509 108569                0          0.397824817               0
+## 43308   43335                0          0.204862503               0
+## 48274   48305                0          0.002914119               0
+## 38812   38838                0          0.848136708               0
+## 56761   56793                0          0.018577129               0
+## 128899 128980                0          0.890897220               1
+## 146102 146196                0          0.225326311               0
+## 6922     6924                0          0.008829855               0
+## 59496   59531                0          0.337018520               0
+## 118030 118103                0          0.751142290               1
+## 134213 134298                0          0.009050963               0
+## 11428   11434                1          0.702766687               1
+## 35202   35226                0          0.086766844               0
+## 100147 100204                0          0.012059698               0
+## 140577 140667                0          0.051694062               0
+## 52023   52054                0          0.049948623               0
+## 134012 134097                0          0.134699406               3
+## 7094     7096                0          0.381203039               0
+## 57429   57461                0          0.029021196               0
+## 83796   83845                0          0.145181054               0
+## 104183 104243                0          0.009203336               0
+## 145154 145248                1          0.445842150               3
+## 80788   80835                0          0.027767836               0
+## 118045 118118                0          0.069987616               0
+## 133617 133702                0          0.114013410               0
+## 14710   14720                0          0.557352957               0
+## 60699   60735                0          0.005799420               0
+## 27008   27027                1          0.135331131               0
+## 34640   34664                0          0.000000000               2
+## 95039   95096                0          0.949170902               0
+## 105618 105678                0          0.772862171               0
+## 112976 113039                0          0.834473961               0
+##          DebtRatio MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD
+## 1065   0.447400000         13591                    13            0
+## 4491   0.052700000         13591                     7            0
+## 38201  0.402100000         13591                    18            0
+## 50210  0.082200000         13591                     6            0
+## 67744  0.323900000         13591                     7            0
+## 69620  0.286100000         13591                     8            0
+## 78747  0.561600000         13591                    14            0
+## 99285  0.339200000         13591                     7            0
+## 121945 0.148700000         13591                     9            0
+## 147431 0.001800000         13591                     2            0
+## 20191  0.364336434         13590                    15            0
+## 59817  0.202120212         13590                    10            2
+## 121863 0.370037004         13590                     3            0
+## 47544  0.417283457         13589                     8            0
+## 64973  0.467093419         13589                    20            0
+## 78666  0.104431329         13588                    13            0
+## 83986  0.110433130         13588                     8            0
+## 17040  0.595938375         13587                     7            0
+## 108509 0.116446579         13587                     6            0
+## 43308  0.465632816         13586                    11            0
+## 48274  0.113656828         13586                    12            0
+## 38812  0.500900540         13585                     8            0
+## 56761  0.296778067         13585                    10            0
+## 128899 0.425855513         13585                    10            0
+## 146102 0.060936562         13585                     3            0
+## 6922   0.000700490         13584                     2            0
+## 59496  0.063844691         13584                     4            0
+## 118030 0.558390874         13584                    11            0
+## 134213 0.001801261         13584                     6            0
+## 11428  0.459813832         13583                    20            0
+## 35202  0.009108197         13583                     7            0
+## 100147 0.993000000         13582                    11            0
+## 140577 0.363763764         13581                    13            0
+## 52023  0.178896786         13580                     4            0
+## 134012 0.538992892         13580                    18            0
+## 7094   0.471165398         13579                     8            0
+## 57429  0.003704445         13579                     4            0
+## 83796  0.219062875         13579                     8            0
+## 104183 0.001201442         13579                     6            0
+## 145154 0.537244694         13579                    14            0
+## 80788  0.072801923         13578                     7            0
+## 118045 0.389244943         13578                    17            0
+## 133617 0.700280393         13578                    20            0
+## 14710  0.296044066         13577                    10            0
+## 60699  0.311867802         13577                     8            0
+## 27008  0.410757212         13576                    17            0
+## 34640  0.536057692         13576                    16            0
+## 95039  0.256710737         13576                     8            0
+## 105618 0.517728365         13576                    21            0
+## 112976 0.515625000         13576                    10            0
+##        No_of_RealEstateLoans No_of_60_89_DPD Gender age Martial_Status
+## 1065                       2               0      0  50        Married
+## 4491                       0               0      1  55         Single
+## 38201                      2               0      1  67        Married
+## 50210                      1               0      1  61        Married
+## 67744                      1               0      0  66         Single
+## 69620                      1               0      0  35         Single
+## 78747                      2               0      0  46         Single
+## 99285                      2               0      0  43         Single
+## 121945                     1               0      0  49        Married
+## 147431                     0               0      0  88         Single
+## 20191                      2               0      0  47         Single
+## 59817                      0               0      0  53        Married
+## 121863                     1               0      1  43         Single
+## 47544                      2               0      1  42        Married
+## 64973                      4               0      1  48        Married
+## 78666                      1               0      0  61         Single
+## 83986                      1               0      0  48        Married
+## 17040                      1               0      0  62        Married
+## 108509                     1               0      1  55         Single
+## 43308                      3               0      1  66         Single
+## 48274                      0               0      1  39         Single
+## 38812                      2               0      1  42        Married
+## 56761                      2               0      0  45        Married
+## 128899                     4               0      0  43         Single
+## 146102                     0               0      1  39         Single
+## 6922                       0               0      0  81         Single
+## 59496                      0               0      1  59         Single
+## 118030                     3               0      1  66         Single
+## 134213                     0               0      0  72         Single
+## 11428                      2               0      0  61         Single
+## 35202                      0               0      0  74        Married
+## 100147                     0               0      1  60         Single
+## 140577                     1               0      1  38        Married
+## 52023                      1               0      0  62        Married
+## 134012                     4               0      1  56         Single
+## 7094                       2               0      0  55         Single
+## 57429                      0               0      1  58         Single
+## 83796                      1               0      0  48         Single
+## 104183                     0               0      0  79         Single
+## 145154                     2               0      0  47         Single
+## 80788                      0               0      0  71         Single
+## 118045                     4               0      0  51        Married
+## 133617                     5               0      0  54        Married
+## 14710                      1               0      0  66         Single
+## 60699                      2               0      0  50         Single
+## 27008                      5               1      0  52        Married
+## 34640                      4               0      0  70        Married
+## 95039                      2               0      0  32         Single
+## 105618                     1               0      0  49         Single
+## 112976                     2               0      1  60         Single
+##        NumberOfDependents Own_House No_Years_address quantile
+## 1065                    2         1                1   80-100
+## 4491                    2         0                3   80-100
+## 38201                   2         1                3   80-100
+## 50210                   6         1                1   80-100
+## 67744                   3         1                3   80-100
+## 69620                   6         1                2   80-100
+## 78747                   8         0                3   80-100
+## 99285                   3         1                2   80-100
+## 121945                  2         1                3   80-100
+## 147431                  2         0                1   80-100
+## 20191                   8         0                3   80-100
+## 59817                   2         1                3   80-100
+## 121863                  6         0                3   80-100
+## 47544                   8         0                2   80-100
+## 64973                   6         1                1   80-100
+## 78666                   2         1                2   80-100
+## 83986                   2         1                3   80-100
+## 17040                   2         0                2   80-100
+## 108509                  3         0                2   80-100
+## 43308                   3         0                3   80-100
+## 48274                   3         1                2   80-100
+## 38812                   3         0                1   80-100
+## 56761                   3         0                2   80-100
+## 128899                  8         1                2   80-100
+## 146102                  8         0                2   80-100
+## 6922                    2         0                2   80-100
+## 59496                   2         1                1   80-100
+## 118030                  3         0                2   80-100
+## 134213                  2         1                3   80-100
+## 11428                   3         0                3   80-100
+## 35202                   2         0                2   80-100
+## 100147                  3         0                3   80-100
+## 140577                  2         1                3   80-100
+## 52023                   3         1                2   80-100
+## 134012                  6         0                1   80-100
+## 7094                    6         1                1   80-100
+## 57429                   2         0                1   80-100
+## 83796                   2         1                1   80-100
+## 104183                  2         0                2   80-100
+## 145154                  6         0                2   80-100
+## 80788                   3         1                3   80-100
+## 118045                  2         1                2   80-100
+## 133617                  9         0                2   80-100
+## 14710                   3         0                1   80-100
+## 60699                   9         0                3   80-100
+## 27008                   8         1                1   80-100
+## 34640                   2         0                2   80-100
+## 95039                   2         0                1   80-100
+## 105618                  3         0                1   80-100
+## 112976                  2         1                2   80-100
+##         Income_segment     Life_stage_Segment               City
+## 1065   Prime Customers            Pre_retired         Chandigarh
+## 4491   Prime Customers            Pre_retired Thiruvananthapuram
+## 38201  Prime Customers                Retired          Hyderabad
+## 50210  Prime Customers                Retired             Shimla
+## 67744  Prime Customers                Retired           Srinagar
+## 69620  Prime Customers Married_with_youngKids             Kohima
+## 78747  Prime Customers            Pre_retired            Gangtok
+## 99285  Prime Customers            Pre_retired              Jammu
+## 121945 Prime Customers            Pre_retired           Srinagar
+## 147431 Prime Customers                Retired              Patna
+## 20191  Prime Customers            Pre_retired             Ranchi
+## 59817  Prime Customers            Pre_retired             Panjim
+## 121863 Prime Customers            Pre_retired             Kohima
+## 47544  Prime Customers            Pre_retired           Srinagar
+## 64973  Prime Customers            Pre_retired          Bangalore
+## 78666  Prime Customers                Retired             Panjim
+## 83986  Prime Customers            Pre_retired         Chandigarh
+## 17040  Prime Customers                Retired             Bhopal
+## 108509 Prime Customers            Pre_retired             Shimla
+## 43308  Prime Customers                Retired             Dispur
+## 48274  Prime Customers Married_with_youngKids             Raipur
+## 38812  Prime Customers            Pre_retired Thiruvananthapuram
+## 56761  Prime Customers            Pre_retired             Ranchi
+## 128899 Prime Customers            Pre_retired            Chennai
+## 146102 Prime Customers Married_with_youngKids         Chandigarh
+## 6922   Prime Customers                Retired        Gandhinagar
+## 59496  Prime Customers            Pre_retired        Gandhinagar
+## 118030 Prime Customers                Retired              Patna
+## 134213 Prime Customers                Retired        Gandhinagar
+## 11428  Prime Customers                Retired             Shimla
+## 35202  Prime Customers                Retired             Aizawl
+## 100147 Prime Customers            Pre_retired             Aizawl
+## 140577 Prime Customers Married_with_youngKids           Dehradun
+## 52023  Prime Customers                Retired              Jammu
+## 134012 Prime Customers            Pre_retired        Gandhinagar
+## 7094   Prime Customers            Pre_retired             Ranchi
+## 57429  Prime Customers            Pre_retired        Gandhinagar
+## 83796  Prime Customers            Pre_retired             Mumbai
+## 104183 Prime Customers                Retired        Gandhinagar
+## 145154 Prime Customers            Pre_retired             Shimla
+## 80788  Prime Customers                Retired          Bangalore
+## 118045 Prime Customers            Pre_retired             Aizawl
+## 133617 Prime Customers            Pre_retired             Shimla
+## 14710  Prime Customers                Retired            Kolkata
+## 60699  Prime Customers            Pre_retired             Bhopal
+## 27008  Prime Customers            Pre_retired         Chandigarh
+## 34640  Prime Customers                Retired             Shimla
+## 95039  Prime Customers Married_with_youngKids Thiruvananthapuram
+## 105618 Prime Customers            Pre_retired             Aizawl
+## 112976 Prime Customers            Pre_retired             Kohima
+##                   State
+## 1065            Haryana
+## 4491             Kerala
+## 38201    Andhra Pradesh
+## 50210  Himachal Pradesh
+## 67744                JK
+## 69620          Nagaland
+## 78747            Sikkim
+## 99285                JK
+## 121945               JK
+## 147431            Bihar
+## 20191         Jharkhand
+## 59817               Goa
+## 121863         Nagaland
+## 47544                JK
+## 64973         Karnataka
+## 78666               Goa
+## 83986           Haryana
+## 17040    Madhya Pradesh
+## 108509 Himachal Pradesh
+## 43308             Assam
+## 48274      Chhattisgarh
+## 38812            Kerala
+## 56761         Jharkhand
+## 128899       Tamil Nadu
+## 146102          Haryana
+## 6922            Gujarat
+## 59496           Gujarat
+## 118030            Bihar
+## 134213          Gujarat
+## 11428  Himachal Pradesh
+## 35202           Mizoram
+## 100147          Mizoram
+## 140577      Uttarakhand
+## 52023                JK
+## 134012          Gujarat
+## 7094          Jharkhand
+## 57429           Gujarat
+## 83796       Maharashtra
+## 104183          Gujarat
+## 145154 Himachal Pradesh
+## 80788         Karnataka
+## 118045          Mizoram
+## 133617 Himachal Pradesh
+## 14710       West Bengal
+## 60699    Madhya Pradesh
+## 27008           Haryana
+## 34640  Himachal Pradesh
+## 95039            Kerala
+## 105618          Mizoram
+## 112976         Nagaland
+summary(newdata)
+##        ID         SeriousDlqin2yrs RevolvingUtilization No_of_30_59_DPD
+##  Min.   :  1066   Min.   :0.00     Min.   :0.00000      Min.   :0.00   
+##  1st Qu.: 39962   1st Qu.:0.00     1st Qu.:0.03425      1st Qu.:0.00   
+##  Median : 68723   Median :0.00     Median :0.14671      Median :0.00   
+##  Mean   : 74372   Mean   :0.08     Mean   :0.29372      Mean   :0.44   
+##  3rd Qu.:111922   3rd Qu.:0.00     3rd Qu.:0.52467      3rd Qu.:0.00   
+##  Max.   :147526   Max.   :1.00     Max.   :0.98774      Max.   :6.00   
+##    DebtRatio         MonthlyIncome   No_Of_OpenCreditLines  No_of_90_DPD 
+##  Min.   :0.0007005   Min.   :13576   Min.   : 2.0          Min.   :0.00  
+##  1st Qu.:0.1112391   1st Qu.:13579   1st Qu.: 7.0          1st Qu.:0.00  
+##  Median :0.3315500   Median :13584   Median : 8.5          Median :0.00  
+##  Mean   :0.3133078   Mean   :13584   Mean   :10.1          Mean   :0.04  
+##  3rd Qu.:0.4667283   3rd Qu.:13590   3rd Qu.:13.0          3rd Qu.:0.00  
+##  Max.   :0.9930000   Max.   :13591   Max.   :21.0          Max.   :2.00  
+##  No_of_RealEstateLoans No_of_60_89_DPD     Gender          age       
+##  Min.   :0.00          Min.   :0.00    Min.   :0.00   Min.   :32.00  
+##  1st Qu.:0.25          1st Qu.:0.00    1st Qu.:0.00   1st Qu.:47.00  
+##  Median :1.00          Median :0.00    Median :0.00   Median :54.50  
+##  Mean   :1.56          Mean   :0.02    Mean   :0.36   Mean   :55.28  
+##  3rd Qu.:2.00          3rd Qu.:0.00    3rd Qu.:1.00   3rd Qu.:62.00  
+##  Max.   :5.00          Max.   :1.00    Max.   :1.00   Max.   :88.00  
+##  Martial_Status NumberOfDependents   Own_House    No_Years_address
+##  Married:18     Min.   :2.00       Min.   :0.00   Min.   :1.00    
+##  Single :32     1st Qu.:2.00       1st Qu.:0.00   1st Qu.:1.00    
+##                 Median :3.00       Median :0.00   Median :2.00    
+##                 Mean   :3.84       Mean   :0.46   Mean   :2.04    
+##                 3rd Qu.:6.00       3rd Qu.:1.00   3rd Qu.:3.00    
+##                 Max.   :9.00       Max.   :1.00   Max.   :3.00    
+##    quantile  Income_segment     Life_stage_Segment     City          
+##  0-20  : 0   Length:50          Length:50          Length:50         
+##  20-40 : 0   Class :character   Class :character   Class :character  
+##  40-60 : 0   Mode  :character   Mode  :character   Mode  :character  
+##  60-80 : 0                                                           
+##  80-100:50                                                           
+##                                                                      
+##     State          
+##  Length:50         
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+## 
+GETTING TOP Nth FOR EACH GROUP
+
+#getting top 10 income for each state
+#Sorting according to states
+
+newdata1<-customer_360[order(customer_360$MonthlyIncome,decreasing = T),]
+
+newdata1<-by(newdata1,newdata1["State"],head,n=10)
+
+newdata1<-Reduce(rbind,newdata1)
+
+View(newdata1)
+
+summary(newdata1)
+##        ID         SeriousDlqin2yrs  RevolvingUtilization No_of_30_59_DPD 
+##  Min.   :  1066   Min.   :0.00000   Min.   :   0.0000    Min.   :0.0000  
+##  1st Qu.: 37501   1st Qu.:0.00000   1st Qu.:   0.0282    1st Qu.:0.0000  
+##  Median : 78753   Median :0.00000   Median :   0.1411    Median :0.0000  
+##  Mean   : 75761   Mean   :0.04286   Mean   :   6.0534    Mean   :0.2679  
+##  3rd Qu.:113371   3rd Qu.:0.00000   3rd Qu.:   0.4218    3rd Qu.:0.0000  
+##  Max.   :149960   Max.   :1.00000   Max.   :1620.0000    Max.   :6.0000  
+##                                                                          
+##    DebtRatio      MonthlyIncome   No_Of_OpenCreditLines  No_of_90_DPD 
+##  Min.   :0.0000   Min.   :10634   Min.   : 0.000        Min.   :0.00  
+##  1st Qu.:0.1665   1st Qu.:13499   1st Qu.: 6.000        1st Qu.:0.00  
+##  Median :0.2647   Median :13546   Median : 9.000        Median :0.00  
+##  Mean   :0.3050   Mean   :13492   Mean   : 9.814        Mean   :0.05  
+##  3rd Qu.:0.3999   3rd Qu.:13567   3rd Qu.:13.000        3rd Qu.:0.00  
+##  Max.   :4.6069   Max.   :13591   Max.   :30.000        Max.   :5.00  
+##                                                                       
+##  No_of_RealEstateLoans No_of_60_89_DPD       Gender            age       
+##  Min.   :0.000         Min.   :0.00000   Min.   :0.0000   Min.   :29.00  
+##  1st Qu.:1.000         1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:47.25  
+##  Median :1.000         Median :0.00000   Median :0.0000   Median :55.00  
+##  Mean   :1.536         Mean   :0.02857   Mean   :0.3481   Mean   :54.72  
+##  3rd Qu.:2.000         3rd Qu.:0.00000   3rd Qu.:1.0000   3rd Qu.:62.00  
+##  Max.   :6.000         Max.   :2.00000   Max.   :1.0000   Max.   :88.00  
+##                                          NA's   :10       NA's   :10     
+##  Martial_Status NumberOfDependents   Own_House      No_Years_address
+##  Married: 83    Min.   :2.000      Min.   :0.0000   Min.   :1.000   
+##  Single :187    1st Qu.:2.000      1st Qu.:0.0000   1st Qu.:1.000   
+##  NA's   : 10    Median :3.000      Median :0.0000   Median :2.000   
+##                 Mean   :3.781      Mean   :0.3852   Mean   :2.037   
+##                 3rd Qu.:6.000      3rd Qu.:1.0000   3rd Qu.:3.000   
+##                 Max.   :9.000      Max.   :1.0000   Max.   :3.000   
+##                 NA's   :10         NA's   :10       NA's   :10      
+##    quantile   Income_segment     Life_stage_Segment     City          
+##  0-20  :  0   Length:280         Length:280         Length:280        
+##  20-40 :  0   Class :character   Class :character   Class :character  
+##  40-60 :  0   Mode  :character   Mode  :character   Mode  :character  
+##  60-80 :  0                                                           
+##  80-100:280                                                           
+##                                                                       
+##                                                                       
+##     State          
+##  Length:280        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## 
+CREATING SUMMARY REPORT AT GROUP LEVEL
+
+var_Summ=function(x){
+  if(class(x)=="numeric"){
+    n<-length(x)
+    nmiss<-sum(is.na(x))
+    mean<-mean(x,na.rm=T)
+    std<-sd(x,na.rm=T)
+    var<-var(x,na.rm=T)
+    min<-min(x,na.rm=T)
+    p1<-quantile(x,0.01,na.rm=T)
+    p5<-quantile(x,0.05,na.rm=T)
+    p10<-quantile(x,0.1,na.rm=T)
+    q1<-quantile(x,0.25,na.rm=T)
+    q2<-quantile(x,0.5,na.rm=T)
+    q3<-quantile(x,0.75,na.rm=T)
+    p90<-quantile(x,0.9,na.rm=T)
+    p95<-quantile(x,0.95,na.rm=T)
+    p99<-quantile(x,0.99,na.rm=T)
+    max<-max(x,na.rm=T)
+    UC1=mean(x,na.rm=T)+3*sd(x,na.rm=T)
+    LC1=mean(x,na.rm=T)-3*sd(x,na.rm=T)
+    UC2=quantile(x,0.99,na.rm=T)
+    LC2=quantile(x,0.01,na.rm=T)
+    iqr=IQR(x,na.rm=T)
+    UC3=q3+1.5*iqr
+    LC3=q1-1.5*iqr
+    ot<-max>UC1 | min<LC1 | max>UC2 | min<LC2 | max>UC3 | min<LC3
+    x[x>max]<-max
+    x[x<min]<-min
+    
+    return(c(n=n,nmiss=nmiss,mean=mean,std=std,var=var,min=min,p1=p1,p5=p5,p10=p10,q1=q1,q2=q2,q3=q3,p90=p90,p95=p95,p99=p99,max=max,outlier=ot))
+  }
+  else{
+    n<-length(x)
+    nmiss<-sum(is.na(x))
+    fre<-table(x)
+    prop<-prop.table(table(x))
+    x[is.na(x)]<-x[which.max(prop.table(table(x)))]
+    
+    return(c(n=n,nmiss=nmiss,freq=fre,proportion=prop))
+  }
+}
+
+num_var=c("RevolvingUtilization","No_of_30_59_DPD","DebtRatio","MonthlyIncome","No_Of_OpenCreditLines","No_of_90_DPD","No_of_RealEstateLoans","No_of_60_89_DPD","age","NumberOfDependents","No_Years_address")
+
+apply(customer_360[num_var], 2, var_Summ)
+##             RevolvingUtilization No_of_30_59_DPD    DebtRatio
+## n                   1.499020e+05    1.499020e+05 1.499020e+05
+## nmiss               0.000000e+00    0.000000e+00 0.000000e+00
+## mean                6.052146e+00    4.210351e-01 3.530612e+02
+## std                 2.498370e+02    4.194063e+00 2.038410e+03
+## var                 6.241850e+04    1.759016e+01 4.155114e+06
+## min                 0.000000e+00    0.000000e+00 0.000000e+00
+## p1.1%               0.000000e+00    0.000000e+00 0.000000e+00
+## p5.5%               0.000000e+00    0.000000e+00 4.319829e-03
+## p10.10%             2.971267e-03    0.000000e+00 3.084516e-02
+## q1.25%              2.986071e-02    0.000000e+00 1.750745e-01
+## q2.50%              1.541406e-01    0.000000e+00 3.665158e-01
+## q3.75%              5.589782e-01    0.000000e+00 8.682602e-01
+## p90.90%             9.811698e-01    1.000000e+00 1.267000e+03
+## p95.95%             9.999999e-01    2.000000e+00 2.449000e+03
+## p99.99%             1.093176e+00    4.000000e+00 4.982960e+03
+## max                 5.070800e+04    9.800000e+01 3.296640e+05
+## outlier.99%         1.000000e+00    1.000000e+00 1.000000e+00
+##             MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD
+## n              149902.000          1.499020e+05 1.499020e+05
+## nmiss           29711.000          0.000000e+00 0.000000e+00
+## mean             7229.944          8.452689e+00 2.660738e-01
+## std              3550.304          5.145851e+00 4.170649e+00
+## var          12604655.615          2.647978e+01 1.739431e+01
+## min                 2.000          0.000000e+00 0.000000e+00
+## p1.1%               2.000          0.000000e+00 0.000000e+00
+## p5.5%             461.000          2.000000e+00 0.000000e+00
+## p10.10%          1598.000          3.000000e+00 0.000000e+00
+## q1.25%           5078.500          5.000000e+00 0.000000e+00
+## q2.50%           7528.000          8.000000e+00 0.000000e+00
+## q3.75%           9874.000          1.100000e+01 0.000000e+00
+## p90.90%         11773.000          1.500000e+01 0.000000e+00
+## p95.95%         12579.000          1.800000e+01 1.000000e+00
+## p99.99%         13318.000          2.400000e+01 3.000000e+00
+## max             13591.000          5.800000e+01 9.800000e+01
+## outlier.99%         1.000          1.000000e+00 1.000000e+00
+##             No_of_RealEstateLoans No_of_60_89_DPD          age
+## n                    1.499020e+05    1.499020e+05 149902.00000
+## nmiss                0.000000e+00    0.000000e+00     44.00000
+## mean                 1.018279e+00    2.404704e-01     52.29577
+## std                  1.129839e+00    4.156528e+00     14.76894
+## var                  1.276535e+00    1.727673e+01    218.12166
+## min                  0.000000e+00    0.000000e+00      0.00000
+## p1.1%                0.000000e+00    0.000000e+00     24.00000
+## p5.5%                0.000000e+00    0.000000e+00     29.00000
+## p10.10%              0.000000e+00    0.000000e+00     33.00000
+## q1.25%               0.000000e+00    0.000000e+00     41.00000
+## q2.50%               1.000000e+00    0.000000e+00     52.00000
+## q3.75%               2.000000e+00    0.000000e+00     63.00000
+## p90.90%              2.000000e+00    0.000000e+00     72.00000
+## p95.95%              3.000000e+00    1.000000e+00     78.00000
+## p99.99%              4.000000e+00    2.000000e+00     87.00000
+## max                  5.400000e+01    9.800000e+01    109.00000
+## outlier.99%          1.000000e+00    1.000000e+00      1.00000
+##             NumberOfDependents No_Years_address
+## n                 1.499020e+05     1.499020e+05
+## nmiss             3.965000e+03     4.400000e+01
+## mean              3.297628e+00     2.002462e+00
+## std               2.098808e+00     8.166086e-01
+## var               4.404996e+00     6.668497e-01
+## min               2.000000e+00     1.000000e+00
+## p1.1%             2.000000e+00     1.000000e+00
+## p5.5%             2.000000e+00     1.000000e+00
+## p10.10%           2.000000e+00     1.000000e+00
+## q1.25%            2.000000e+00     1.000000e+00
+## q2.50%            2.000000e+00     2.000000e+00
+## q3.75%            3.000000e+00     3.000000e+00
+## p90.90%           6.000000e+00     3.000000e+00
+## p95.95%           8.000000e+00     3.000000e+00
+## p99.99%           9.000000e+00     3.000000e+00
+## max               1.400000e+01     3.000000e+00
+## outlier.99%       1.000000e+00     0.000000e+00
+cat_var=c("SeriousDlqin2yrs","Gender","Martial_Status","Own_House","Income_segment","Life_stage_Segment","City","State","quantile")
+
+apply(customer_360[cat_var], 2, var_Summ)
+## $SeriousDlqin2yrs
+##            n        nmiss       freq.0       freq.1 proportion.0 
+## 1.499020e+05 0.000000e+00 1.398840e+05 1.001800e+04 9.331697e-01 
+## proportion.1 
+## 6.683033e-02 
+## 
+## $Gender
+##             n         nmiss       freq. 0       freq. 1 proportion. 0 
+##   1.49902e+05   4.40000e+01   9.36680e+04   5.61900e+04   6.25045e-01 
+## proportion. 1 
+##   3.74955e-01 
+## 
+## $Martial_Status
+##                  n              nmiss       freq.Married 
+##       1.499020e+05       4.400000e+01       4.281900e+04 
+##        freq.Single proportion.Married  proportion.Single 
+##       1.070390e+05       2.857305e-01       7.142695e-01 
+## 
+## $Own_House
+##             n         nmiss       freq. 0       freq. 1 proportion. 0 
+##  1.499020e+05  4.400000e+01  9.001500e+04  5.984300e+04  6.006686e-01 
+## proportion. 1 
+##  3.993314e-01 
+## 
+## $Income_segment
+##                                   n                               nmiss 
+##                        1.499020e+05                        3.134300e+04 
+##           freq.High value customers            freq.Low Value customers 
+##                        2.242800e+04                        2.374100e+04 
+##         freq.Medium Value customers                freq.Prime Customers 
+##                        2.565700e+04                        2.402900e+04 
+##       freq.Very Low Value customers     proportion.High value customers 
+##                        2.270400e+04                        1.891716e-01 
+##      proportion.Low Value customers   proportion.Medium Value customers 
+##                        2.002463e-01                        2.164070e-01 
+##          proportion.Prime Customers proportion.Very Low Value customers 
+##                        2.026755e-01                        1.914996e-01 
+## 
+## $Life_stage_Segment
+##                                 n                             nmiss 
+##                      1.499020e+05                      4.740000e+02 
+##       freq.Married_with_youngKids                  freq.Pre_retired 
+##                      2.951900e+04                      6.978100e+04 
+##                      freq.Retired                      freq.Student 
+##                      4.501800e+04                      1.810000e+02 
+##           freq.UnMarried_employed proportion.Married_with_youngKids 
+##                      4.929000e+03                      1.975466e-01 
+##            proportion.Pre_retired                proportion.Retired 
+##                      4.669874e-01                      3.012688e-01 
+##                proportion.Student     proportion.UnMarried_employed 
+##                      1.211286e-03                      3.298579e-02 
+## 
+## $City
+##                             n                         nmiss 
+##                  1.499020e+05                  0.000000e+00 
+##                         freq1                 freq.Agartala 
+##                  4.400000e+01                  3.257000e+03 
+##                   freq.Aizawl                freq.Bangalore 
+##                  6.521000e+03                  6.510000e+03 
+##                   freq.Bhopal              freq.Bhubaneswar 
+##                  6.515000e+03                  3.259000e+03 
+##               freq.Chandigarh                  freq.Chennai 
+##                  9.776000e+03                  3.257000e+03 
+##                 freq.Dehradun                   freq.Dispur 
+##                  3.254000e+03                  6.513000e+03 
+##              freq.Gandhinagar                  freq.Gangtok 
+##                  6.518000e+03                  3.258000e+03 
+##                freq.Hyderabad                   freq.Imphal 
+##                  6.518000e+03                  3.257000e+03 
+##                 freq.Itanagar                   freq.Jaipur 
+##                  6.514000e+03                  3.255000e+03 
+##                    freq.Jammu                   freq.Kohima 
+##                  6.513000e+03                  6.516000e+03 
+##                  freq.Kolkata                  freq.Lucknow 
+##                  3.258000e+03                  3.256000e+03 
+##                   freq.Mumbai                   freq.Panjim 
+##                  3.260000e+03                  6.517000e+03 
+##                    freq.Patna                   freq.Raipur 
+##                  6.514000e+03                  6.518000e+03 
+##                   freq.Ranchi                 freq.Shillong 
+##                  6.519000e+03                  3.256000e+03 
+##                   freq.Shimla                 freq.Srinagar 
+##                  6.515000e+03                  6.519000e+03 
+##       freq.Thiruvananthapuram                   proportion1 
+##                  6.515000e+03                  2.935251e-04 
+##           proportion.Agartala             proportion.Aizawl 
+##                  2.172753e-02                  4.350175e-02 
+##          proportion.Bangalore             proportion.Bhopal 
+##                  4.342837e-02                  4.346173e-02 
+##        proportion.Bhubaneswar         proportion.Chandigarh 
+##                  2.174087e-02                  6.521594e-02 
+##            proportion.Chennai           proportion.Dehradun 
+##                  2.172753e-02                  2.170752e-02 
+##             proportion.Dispur        proportion.Gandhinagar 
+##                  4.344839e-02                  4.348174e-02 
+##            proportion.Gangtok          proportion.Hyderabad 
+##                  2.173420e-02                  4.348174e-02 
+##             proportion.Imphal           proportion.Itanagar 
+##                  2.172753e-02                  4.345506e-02 
+##             proportion.Jaipur              proportion.Jammu 
+##                  2.171419e-02                  4.344839e-02 
+##             proportion.Kohima            proportion.Kolkata 
+##                  4.346840e-02                  2.173420e-02 
+##            proportion.Lucknow             proportion.Mumbai 
+##                  2.172086e-02                  2.174754e-02 
+##             proportion.Panjim              proportion.Patna 
+##                  4.347507e-02                  4.345506e-02 
+##             proportion.Raipur             proportion.Ranchi 
+##                  4.348174e-02                  4.348841e-02 
+##           proportion.Shillong             proportion.Shimla 
+##                  2.172086e-02                  4.346173e-02 
+##           proportion.Srinagar proportion.Thiruvananthapuram 
+##                  4.348841e-02                  4.346173e-02 
+## 
+## $State
+##                            n                        nmiss 
+##                 1.499020e+05                 0.000000e+00 
+##                        freq1          freq.Andhra Pradesh 
+##                 4.400000e+01                 6.518000e+03 
+##       freq.Arunachal Pradesh                   freq.Assam 
+##                 6.514000e+03                 6.513000e+03 
+##                   freq.Bihar            freq.Chhattisgarh 
+##                 6.514000e+03                 6.518000e+03 
+##                     freq.Goa                 freq.Gujarat 
+##                 6.517000e+03                 6.518000e+03 
+##                 freq.Haryana        freq.Himachal Pradesh 
+##                 9.776000e+03                 6.515000e+03 
+##               freq.Jharkhand                      freq.JK 
+##                 6.519000e+03                 1.303200e+04 
+##               freq.Karnataka                  freq.Kerala 
+##                 6.510000e+03                 6.515000e+03 
+##          freq.Madhya Pradesh             freq.Maharashtra 
+##                 6.515000e+03                 3.260000e+03 
+##                 freq.Manipur               freq.Meghalaya 
+##                 3.257000e+03                 3.256000e+03 
+##                 freq.Mizoram                freq.Nagaland 
+##                 6.521000e+03                 6.516000e+03 
+##          freq.Odisha(Orissa)               freq.Rajasthan 
+##                 3.259000e+03                 3.255000e+03 
+##                  freq.Sikkim              freq.Tamil Nadu 
+##                 3.258000e+03                 3.257000e+03 
+##                 freq.Tripura           freq.Uttar Pradesh 
+##                 3.257000e+03                 3.256000e+03 
+##             freq.Uttarakhand             freq.West Bengal 
+##                 3.254000e+03                 3.258000e+03 
+##                  proportion1    proportion.Andhra Pradesh 
+##                 2.935251e-04                 4.348174e-02 
+## proportion.Arunachal Pradesh             proportion.Assam 
+##                 4.345506e-02                 4.344839e-02 
+##             proportion.Bihar      proportion.Chhattisgarh 
+##                 4.345506e-02                 4.348174e-02 
+##               proportion.Goa           proportion.Gujarat 
+##                 4.347507e-02                 4.348174e-02 
+##           proportion.Haryana  proportion.Himachal Pradesh 
+##                 6.521594e-02                 4.346173e-02 
+##         proportion.Jharkhand                proportion.JK 
+##                 4.348841e-02                 8.693680e-02 
+##         proportion.Karnataka            proportion.Kerala 
+##                 4.342837e-02                 4.346173e-02 
+##    proportion.Madhya Pradesh       proportion.Maharashtra 
+##                 4.346173e-02                 2.174754e-02 
+##           proportion.Manipur         proportion.Meghalaya 
+##                 2.172753e-02                 2.172086e-02 
+##           proportion.Mizoram          proportion.Nagaland 
+##                 4.350175e-02                 4.346840e-02 
+##    proportion.Odisha(Orissa)         proportion.Rajasthan 
+##                 2.174087e-02                 2.171419e-02 
+##            proportion.Sikkim        proportion.Tamil Nadu 
+##                 2.173420e-02                 2.172753e-02 
+##           proportion.Tripura     proportion.Uttar Pradesh 
+##                 2.172753e-02                 2.172086e-02 
+##       proportion.Uttarakhand       proportion.West Bengal 
+##                 2.170752e-02                 2.173420e-02 
+## 
+## $quantile
+##                 n             nmiss         freq.0-20        freq.20-40 
+##      1.499020e+05      3.134300e+04      2.270400e+04      2.374100e+04 
+##        freq.40-60        freq.60-80       freq.80-100   proportion.0-20 
+##      2.565700e+04      2.242800e+04      2.402900e+04      1.914996e-01 
+##  proportion.20-40  proportion.40-60  proportion.60-80 proportion.80-100 
+##      2.002463e-01      2.164070e-01      1.891716e-01      2.026755e-01
+sapply(customer_360[num_var],  var_Summ)
+## $RevolvingUtilization
+##            n        nmiss         mean          std          var 
+## 1.499020e+05 0.000000e+00 6.052146e+00 2.498370e+02 6.241850e+04 
+##          min        p1.1%        p5.5%      p10.10%       q1.25% 
+## 0.000000e+00 0.000000e+00 0.000000e+00 2.971267e-03 2.986071e-02 
+##       q2.50%       q3.75%      p90.90%      p95.95%      p99.99% 
+## 1.541406e-01 5.589782e-01 9.811698e-01 9.999999e-01 1.093176e+00 
+##          max  outlier.99% 
+## 5.070800e+04 1.000000e+00 
+## 
+## $No_of_30_59_DPD
+##             n         nmiss        freq.0        freq.1        freq.2 
+##  1.499020e+05  0.000000e+00  1.259400e+05  1.602300e+04  4.593000e+03 
+##        freq.3        freq.4        freq.5        freq.6        freq.7 
+##  1.751000e+03  7.470000e+02  3.420000e+02  1.380000e+02  5.400000e+01 
+##        freq.8        freq.9       freq.10       freq.11       freq.12 
+##  2.500000e+01  1.200000e+01  4.000000e+00  1.000000e+00  2.000000e+00 
+##       freq.13       freq.96       freq.98  proportion.0  proportion.1 
+##  1.000000e+00  5.000000e+00  2.640000e+02  8.401489e-01  1.068898e-01 
+##  proportion.2  proportion.3  proportion.4  proportion.5  proportion.6 
+##  3.064002e-02  1.168096e-02  4.983256e-03  2.281491e-03  9.206015e-04 
+##  proportion.7  proportion.8  proportion.9 proportion.10 proportion.11 
+##  3.602354e-04  1.667756e-04  8.005230e-05  2.668410e-05  6.671025e-06 
+## proportion.12 proportion.13 proportion.96 proportion.98 
+##  1.334205e-05  6.671025e-06  3.335513e-05  1.761151e-03 
+## 
+## $DebtRatio
+##            n        nmiss         mean          std          var 
+## 1.499020e+05 0.000000e+00 3.530612e+02 2.038410e+03 4.155114e+06 
+##          min        p1.1%        p5.5%      p10.10%       q1.25% 
+## 0.000000e+00 0.000000e+00 4.319829e-03 3.084516e-02 1.750745e-01 
+##       q2.50%       q3.75%      p90.90%      p95.95%      p99.99% 
+## 3.665158e-01 8.682602e-01 1.267000e+03 2.449000e+03 4.982960e+03 
+##          max  outlier.99% 
+## 3.296640e+05 1.000000e+00 
+## 
+## $MonthlyIncome
+##            n        nmiss         mean          std          var 
+##   149902.000    29711.000     7229.944     3550.304 12604655.615 
+##          min        p1.1%        p5.5%      p10.10%       q1.25% 
+##        2.000        2.000      461.000     1598.000     5078.500 
+##       q2.50%       q3.75%      p90.90%      p95.95%      p99.99% 
+##     7528.000     9874.000    11773.000    12579.000    13318.000 
+##          max  outlier.99% 
+##    13591.000        1.000 
+## 
+## $No_Of_OpenCreditLines
+##             n         nmiss        freq.0        freq.1        freq.2 
+##  1.499020e+05  0.000000e+00  1.888000e+03  4.434000e+03  6.661000e+03 
+##        freq.3        freq.4        freq.5        freq.6        freq.7 
+##  9.051000e+03  1.160200e+04  1.292200e+04  1.360300e+04  1.323800e+04 
+##        freq.8        freq.9       freq.10       freq.11       freq.12 
+##  1.255700e+04  1.134800e+04  9.618000e+03  8.315000e+03  7.001000e+03 
+##       freq.13       freq.14       freq.15       freq.16       freq.17 
+##  5.661000e+03  4.545000e+03  3.644000e+03  2.998000e+03  2.369000e+03 
+##       freq.18       freq.19       freq.20       freq.21       freq.22 
+##  1.872000e+03  1.433000e+03  1.166000e+03  8.620000e+02  6.840000e+02 
+##       freq.23       freq.24       freq.25       freq.26       freq.27 
+##  5.320000e+02  4.220000e+02  3.370000e+02  2.390000e+02  1.940000e+02 
+##       freq.28       freq.29       freq.30       freq.31       freq.32 
+##  1.500000e+02  1.140000e+02  8.800000e+01  7.400000e+01  5.200000e+01 
+##       freq.33       freq.34       freq.35       freq.36       freq.37 
+##  4.700000e+01  3.500000e+01  2.700000e+01  1.800000e+01  7.000000e+00 
+##       freq.38       freq.39       freq.40       freq.41       freq.42 
+##  1.300000e+01  9.000000e+00  1.000000e+01  4.000000e+00  8.000000e+00 
+##       freq.43       freq.44       freq.45       freq.46       freq.47 
+##  8.000000e+00  2.000000e+00  8.000000e+00  3.000000e+00  2.000000e+00 
+##       freq.48       freq.49       freq.50       freq.51       freq.52 
+##  6.000000e+00  4.000000e+00  2.000000e+00  2.000000e+00  3.000000e+00 
+##       freq.53       freq.54       freq.56       freq.57       freq.58 
+##  1.000000e+00  4.000000e+00  2.000000e+00  2.000000e+00  1.000000e+00 
+##  proportion.0  proportion.1  proportion.2  proportion.3  proportion.4 
+##  1.259490e-02  2.957933e-02  4.443570e-02  6.037945e-02  7.739723e-02 
+##  proportion.5  proportion.6  proportion.7  proportion.8  proportion.9 
+##  8.620299e-02  9.074595e-02  8.831103e-02  8.376806e-02  7.570279e-02 
+## proportion.10 proportion.11 proportion.12 proportion.13 proportion.14 
+##  6.416192e-02  5.546957e-02  4.670385e-02  3.776467e-02  3.031981e-02 
+## proportion.15 proportion.16 proportion.17 proportion.18 proportion.19 
+##  2.430922e-02  1.999973e-02  1.580366e-02  1.248816e-02  9.559579e-03 
+## proportion.20 proportion.21 proportion.22 proportion.23 proportion.24 
+##  7.778415e-03  5.750424e-03  4.562981e-03  3.548985e-03  2.815173e-03 
+## proportion.25 proportion.26 proportion.27 proportion.28 proportion.29 
+##  2.248135e-03  1.594375e-03  1.294179e-03  1.000654e-03  7.604969e-04 
+## proportion.30 proportion.31 proportion.32 proportion.33 proportion.34 
+##  5.870502e-04  4.936559e-04  3.468933e-04  3.135382e-04  2.334859e-04 
+## proportion.35 proportion.36 proportion.37 proportion.38 proportion.39 
+##  1.801177e-04  1.200785e-04  4.669718e-05  8.672333e-05  6.003923e-05 
+## proportion.40 proportion.41 proportion.42 proportion.43 proportion.44 
+##  6.671025e-05  2.668410e-05  5.336820e-05  5.336820e-05  1.334205e-05 
+## proportion.45 proportion.46 proportion.47 proportion.48 proportion.49 
+##  5.336820e-05  2.001308e-05  1.334205e-05  4.002615e-05  2.668410e-05 
+## proportion.50 proportion.51 proportion.52 proportion.53 proportion.54 
+##  1.334205e-05  1.334205e-05  2.001308e-05  6.671025e-06  2.668410e-05 
+## proportion.56 proportion.57 proportion.58 
+##  1.334205e-05  1.334205e-05  6.671025e-06 
+## 
+## $No_of_90_DPD
+##             n         nmiss        freq.0        freq.1        freq.2 
+##  1.499020e+05  0.000000e+00  1.415710e+05  5.239000e+03  1.553000e+03 
+##        freq.3        freq.4        freq.5        freq.6        freq.7 
+##  6.660000e+02  2.910000e+02  1.310000e+02  8.000000e+01  3.800000e+01 
+##        freq.8        freq.9       freq.10       freq.11       freq.12 
+##  2.100000e+01  1.900000e+01  8.000000e+00  5.000000e+00  2.000000e+00 
+##       freq.13       freq.14       freq.15       freq.17       freq.96 
+##  4.000000e+00  2.000000e+00  2.000000e+00  1.000000e+00  5.000000e+00 
+##       freq.98  proportion.0  proportion.1  proportion.2  proportion.3 
+##  2.640000e+02  9.444237e-01  3.494950e-02  1.036010e-02  4.442903e-03 
+##  proportion.4  proportion.5  proportion.6  proportion.7  proportion.8 
+##  1.941268e-03  8.739043e-04  5.336820e-04  2.534990e-04  1.400915e-04 
+##  proportion.9 proportion.10 proportion.11 proportion.12 proportion.13 
+##  1.267495e-04  5.336820e-05  3.335513e-05  1.334205e-05  2.668410e-05 
+## proportion.14 proportion.15 proportion.17 proportion.96 proportion.98 
+##  1.334205e-05  1.334205e-05  6.671025e-06  3.335513e-05  1.761151e-03 
+## 
+## $No_of_RealEstateLoans
+##             n         nmiss        freq.0        freq.1        freq.2 
+##  1.499020e+05  0.000000e+00  5.614800e+04  5.230700e+04  3.150100e+04 
+##        freq.3        freq.4        freq.5        freq.6        freq.7 
+##  6.296000e+03  2.169000e+03  6.880000e+02  3.200000e+02  1.710000e+02 
+##        freq.8        freq.9       freq.10       freq.11       freq.12 
+##  9.300000e+01  7.800000e+01  3.700000e+01  2.300000e+01  1.800000e+01 
+##       freq.13       freq.14       freq.15       freq.16       freq.17 
+##  1.500000e+01  7.000000e+00  7.000000e+00  4.000000e+00  4.000000e+00 
+##       freq.18       freq.19       freq.20       freq.21       freq.23 
+##  2.000000e+00  2.000000e+00  2.000000e+00  1.000000e+00  2.000000e+00 
+##       freq.25       freq.26       freq.29       freq.32       freq.54 
+##  3.000000e+00  1.000000e+00  1.000000e+00  1.000000e+00  1.000000e+00 
+##  proportion.0  proportion.1  proportion.2  proportion.3  proportion.4 
+##  3.745647e-01  3.489413e-01  2.101440e-01  4.200077e-02  1.446945e-02 
+##  proportion.5  proportion.6  proportion.7  proportion.8  proportion.9 
+##  4.589665e-03  2.134728e-03  1.140745e-03  6.204053e-04  5.203400e-04 
+## proportion.10 proportion.11 proportion.12 proportion.13 proportion.14 
+##  2.468279e-04  1.534336e-04  1.200785e-04  1.000654e-04  4.669718e-05 
+## proportion.15 proportion.16 proportion.17 proportion.18 proportion.19 
+##  4.669718e-05  2.668410e-05  2.668410e-05  1.334205e-05  1.334205e-05 
+## proportion.20 proportion.21 proportion.23 proportion.25 proportion.26 
+##  1.334205e-05  6.671025e-06  1.334205e-05  2.001308e-05  6.671025e-06 
+## proportion.29 proportion.32 proportion.54 
+##  6.671025e-06  6.671025e-06  6.671025e-06 
+## 
+## $No_of_60_89_DPD
+##             n         nmiss        freq.0        freq.1        freq.2 
+##  1.499020e+05  0.000000e+00  1.423090e+05  5.720000e+03  1.118000e+03 
+##        freq.3        freq.4        freq.5        freq.6        freq.7 
+##  3.180000e+02  1.050000e+02  3.400000e+01  1.600000e+01  9.000000e+00 
+##        freq.8        freq.9       freq.11       freq.96       freq.98 
+##  2.000000e+00  1.000000e+00  1.000000e+00  5.000000e+00  2.640000e+02 
+##  proportion.0  proportion.1  proportion.2  proportion.3  proportion.4 
+##  9.493469e-01  3.815826e-02  7.458206e-03  2.121386e-03  7.004576e-04 
+##  proportion.5  proportion.6  proportion.7  proportion.8  proportion.9 
+##  2.268149e-04  1.067364e-04  6.003923e-05  1.334205e-05  6.671025e-06 
+## proportion.11 proportion.96 proportion.98 
+##  6.671025e-06  3.335513e-05  1.761151e-03 
+## 
+## $age
+##              n          nmiss         freq.0        freq.21        freq.22 
+##   1.499020e+05   4.400000e+01   1.000000e+00   1.800000e+02   4.300000e+02 
+##        freq.23        freq.24        freq.25        freq.26        freq.27 
+##   6.360000e+02   8.110000e+02   9.530000e+02   1.193000e+03   1.336000e+03 
+##        freq.28        freq.29        freq.30        freq.31        freq.32 
+##   1.559000e+03   1.701000e+03   1.937000e+03   2.036000e+03   2.051000e+03 
+##        freq.33        freq.34        freq.35        freq.36        freq.37 
+##   2.234000e+03   2.153000e+03   2.246000e+03   2.377000e+03   2.520000e+03 
+##        freq.38        freq.39        freq.40        freq.41        freq.42 
+##   2.629000e+03   2.986000e+03   3.090000e+03   3.117000e+03   3.078000e+03 
+##        freq.43        freq.44        freq.45        freq.46        freq.47 
+##   3.206000e+03   3.294000e+03   3.503000e+03   3.710000e+03   3.714000e+03 
+##        freq.48        freq.49        freq.50        freq.51        freq.52 
+##   3.802000e+03   3.835000e+03   3.750000e+03   3.627000e+03   3.608000e+03 
+##        freq.53        freq.54        freq.55        freq.56        freq.57 
+##   3.644000e+03   3.558000e+03   3.413000e+03   3.584000e+03   3.373000e+03 
+##        freq.58        freq.59        freq.60        freq.61        freq.62 
+##   3.438000e+03   3.272000e+03   3.255000e+03   3.522000e+03   3.566000e+03 
+##        freq.63        freq.64        freq.65        freq.66        freq.67 
+##   3.716000e+03   3.055000e+03   2.593000e+03   2.493000e+03   2.501000e+03 
+##        freq.68        freq.69        freq.70        freq.71        freq.72 
+##   2.231000e+03   1.952000e+03   1.776000e+03   1.644000e+03   1.645000e+03 
+##        freq.73        freq.74        freq.75        freq.76        freq.77 
+##   1.517000e+03   1.450000e+03   1.240000e+03   1.182000e+03   1.096000e+03 
+##        freq.78        freq.79        freq.80        freq.81        freq.82 
+##   1.054000e+03   9.800000e+02   8.760000e+02   7.740000e+02   6.460000e+02 
+##        freq.83        freq.84        freq.85        freq.86        freq.87 
+##   5.120000e+02   4.790000e+02   4.830000e+02   4.060000e+02   3.550000e+02 
+##        freq.88        freq.89        freq.90        freq.91        freq.92 
+##   3.120000e+02   2.760000e+02   1.970000e+02   1.540000e+02   9.300000e+01 
+##        freq.93        freq.94        freq.95        freq.96        freq.97 
+##   8.700000e+01   4.700000e+01   4.500000e+01   1.800000e+01   1.700000e+01 
+##        freq.98        freq.99       freq.101       freq.102       freq.103 
+##   6.000000e+00   9.000000e+00   3.000000e+00   3.000000e+00   3.000000e+00 
+##       freq.105       freq.107       freq.109   proportion.0  proportion.21 
+##   1.000000e+00   1.000000e+00   2.000000e+00   6.672984e-06   1.201137e-03 
+##  proportion.22  proportion.23  proportion.24  proportion.25  proportion.26 
+##   2.869383e-03   4.244018e-03   5.411790e-03   6.359354e-03   7.960870e-03 
+##  proportion.27  proportion.28  proportion.29  proportion.30  proportion.31 
+##   8.915106e-03   1.040318e-02   1.135075e-02   1.292557e-02   1.358619e-02 
+##  proportion.32  proportion.33  proportion.34  proportion.35  proportion.36 
+##   1.368629e-02   1.490745e-02   1.436693e-02   1.498752e-02   1.586168e-02 
+##  proportion.37  proportion.38  proportion.39  proportion.40  proportion.41 
+##   1.681592e-02   1.754327e-02   1.992553e-02   2.061952e-02   2.079969e-02 
+##  proportion.42  proportion.43  proportion.44  proportion.45  proportion.46 
+##   2.053944e-02   2.139359e-02   2.198081e-02   2.337546e-02   2.475677e-02 
+##  proportion.47  proportion.48  proportion.49  proportion.50  proportion.51 
+##   2.478346e-02   2.537068e-02   2.559089e-02   2.502369e-02   2.420291e-02 
+##  proportion.52  proportion.53  proportion.54  proportion.55  proportion.56 
+##   2.407613e-02   2.431635e-02   2.374248e-02   2.277489e-02   2.391597e-02 
+##  proportion.57  proportion.58  proportion.59  proportion.60  proportion.61 
+##   2.250797e-02   2.294172e-02   2.183400e-02   2.172056e-02   2.350225e-02 
+##  proportion.62  proportion.63  proportion.64  proportion.65  proportion.66 
+##   2.379586e-02   2.479681e-02   2.038597e-02   1.730305e-02   1.663575e-02 
+##  proportion.67  proportion.68  proportion.69  proportion.70  proportion.71 
+##   1.668913e-02   1.488743e-02   1.302566e-02   1.185122e-02   1.097039e-02 
+##  proportion.72  proportion.73  proportion.74  proportion.75  proportion.76 
+##   1.097706e-02   1.012292e-02   9.675826e-03   8.274500e-03   7.887467e-03 
+##  proportion.77  proportion.78  proportion.79  proportion.80  proportion.81 
+##   7.313590e-03   7.033325e-03   6.539524e-03   5.845534e-03   5.164889e-03 
+##  proportion.82  proportion.83  proportion.84  proportion.85  proportion.86 
+##   4.310748e-03   3.416568e-03   3.196359e-03   3.223051e-03   2.709231e-03 
+##  proportion.87  proportion.88  proportion.89  proportion.90  proportion.91 
+##   2.368909e-03   2.081971e-03   1.841744e-03   1.314578e-03   1.027639e-03 
+##  proportion.92  proportion.93  proportion.94  proportion.95  proportion.96 
+##   6.205875e-04   5.805496e-04   3.136302e-04   3.002843e-04   1.201137e-04 
+##  proportion.97  proportion.98  proportion.99 proportion.101 proportion.102 
+##   1.134407e-04   4.003790e-05   6.005685e-05   2.001895e-05   2.001895e-05 
+## proportion.103 proportion.105 proportion.107 proportion.109 
+##   2.001895e-05   6.672984e-06   6.672984e-06   1.334597e-05 
+## 
+## $NumberOfDependents
+##            n        nmiss         mean          std          var 
+## 1.499020e+05 3.965000e+03 3.297628e+00 2.098808e+00 4.404996e+00 
+##          min        p1.1%        p5.5%      p10.10%       q1.25% 
+## 2.000000e+00 2.000000e+00 2.000000e+00 2.000000e+00 2.000000e+00 
+##       q2.50%       q3.75%      p90.90%      p95.95%      p99.99% 
+## 2.000000e+00 3.000000e+00 6.000000e+00 8.000000e+00 9.000000e+00 
+##          max  outlier.99% 
+## 1.400000e+01 1.000000e+00 
+## 
+## $No_Years_address
+##            n        nmiss       freq.1       freq.2       freq.3 
+## 1.499020e+05 4.400000e+01 4.978200e+04 4.992500e+04 5.015100e+04 
+## proportion.1 proportion.2 proportion.3 
+## 3.321945e-01 3.331487e-01 3.346568e-01
+sapply(customer_360[cat_var],  var_Summ)
+## $SeriousDlqin2yrs
+##            n        nmiss       freq.0       freq.1 proportion.0 
+## 1.499020e+05 0.000000e+00 1.398840e+05 1.001800e+04 9.331697e-01 
+## proportion.1 
+## 6.683033e-02 
+## 
+## $Gender
+##            n        nmiss       freq.0       freq.1 proportion.0 
+##  1.49902e+05  4.40000e+01  9.36680e+04  5.61900e+04  6.25045e-01 
+## proportion.1 
+##  3.74955e-01 
+## 
+## $Martial_Status
+##                  n              nmiss       freq.Married 
+##       1.499020e+05       4.400000e+01       4.281900e+04 
+##        freq.Single proportion.Married  proportion.Single 
+##       1.070390e+05       2.857305e-01       7.142695e-01 
+## 
+## $Own_House
+##            n        nmiss       freq.0       freq.1 proportion.0 
+## 1.499020e+05 4.400000e+01 9.001500e+04 5.984300e+04 6.006686e-01 
+## proportion.1 
+## 3.993314e-01 
+## 
+## $Income_segment
+##                                   n                               nmiss 
+##                        1.499020e+05                        3.134300e+04 
+##           freq.High value customers            freq.Low Value customers 
+##                        2.242800e+04                        2.374100e+04 
+##         freq.Medium Value customers                freq.Prime Customers 
+##                        2.565700e+04                        2.402900e+04 
+##       freq.Very Low Value customers     proportion.High value customers 
+##                        2.270400e+04                        1.891716e-01 
+##      proportion.Low Value customers   proportion.Medium Value customers 
+##                        2.002463e-01                        2.164070e-01 
+##          proportion.Prime Customers proportion.Very Low Value customers 
+##                        2.026755e-01                        1.914996e-01 
+## 
+## $Life_stage_Segment
+##                                 n                             nmiss 
+##                      1.499020e+05                      4.740000e+02 
+##       freq.Married_with_youngKids                  freq.Pre_retired 
+##                      2.951900e+04                      6.978100e+04 
+##                      freq.Retired                      freq.Student 
+##                      4.501800e+04                      1.810000e+02 
+##           freq.UnMarried_employed proportion.Married_with_youngKids 
+##                      4.929000e+03                      1.975466e-01 
+##            proportion.Pre_retired                proportion.Retired 
+##                      4.669874e-01                      3.012688e-01 
+##                proportion.Student     proportion.UnMarried_employed 
+##                      1.211286e-03                      3.298579e-02 
+## 
+## $City
+##                             n                         nmiss 
+##                  1.499020e+05                  0.000000e+00 
+##                         freq1                 freq.Agartala 
+##                  4.400000e+01                  3.257000e+03 
+##                   freq.Aizawl                freq.Bangalore 
+##                  6.521000e+03                  6.510000e+03 
+##                   freq.Bhopal              freq.Bhubaneswar 
+##                  6.515000e+03                  3.259000e+03 
+##               freq.Chandigarh                  freq.Chennai 
+##                  9.776000e+03                  3.257000e+03 
+##                 freq.Dehradun                   freq.Dispur 
+##                  3.254000e+03                  6.513000e+03 
+##              freq.Gandhinagar                  freq.Gangtok 
+##                  6.518000e+03                  3.258000e+03 
+##                freq.Hyderabad                   freq.Imphal 
+##                  6.518000e+03                  3.257000e+03 
+##                 freq.Itanagar                   freq.Jaipur 
+##                  6.514000e+03                  3.255000e+03 
+##                    freq.Jammu                   freq.Kohima 
+##                  6.513000e+03                  6.516000e+03 
+##                  freq.Kolkata                  freq.Lucknow 
+##                  3.258000e+03                  3.256000e+03 
+##                   freq.Mumbai                   freq.Panjim 
+##                  3.260000e+03                  6.517000e+03 
+##                    freq.Patna                   freq.Raipur 
+##                  6.514000e+03                  6.518000e+03 
+##                   freq.Ranchi                 freq.Shillong 
+##                  6.519000e+03                  3.256000e+03 
+##                   freq.Shimla                 freq.Srinagar 
+##                  6.515000e+03                  6.519000e+03 
+##       freq.Thiruvananthapuram                   proportion1 
+##                  6.515000e+03                  2.935251e-04 
+##           proportion.Agartala             proportion.Aizawl 
+##                  2.172753e-02                  4.350175e-02 
+##          proportion.Bangalore             proportion.Bhopal 
+##                  4.342837e-02                  4.346173e-02 
+##        proportion.Bhubaneswar         proportion.Chandigarh 
+##                  2.174087e-02                  6.521594e-02 
+##            proportion.Chennai           proportion.Dehradun 
+##                  2.172753e-02                  2.170752e-02 
+##             proportion.Dispur        proportion.Gandhinagar 
+##                  4.344839e-02                  4.348174e-02 
+##            proportion.Gangtok          proportion.Hyderabad 
+##                  2.173420e-02                  4.348174e-02 
+##             proportion.Imphal           proportion.Itanagar 
+##                  2.172753e-02                  4.345506e-02 
+##             proportion.Jaipur              proportion.Jammu 
+##                  2.171419e-02                  4.344839e-02 
+##             proportion.Kohima            proportion.Kolkata 
+##                  4.346840e-02                  2.173420e-02 
+##            proportion.Lucknow             proportion.Mumbai 
+##                  2.172086e-02                  2.174754e-02 
+##             proportion.Panjim              proportion.Patna 
+##                  4.347507e-02                  4.345506e-02 
+##             proportion.Raipur             proportion.Ranchi 
+##                  4.348174e-02                  4.348841e-02 
+##           proportion.Shillong             proportion.Shimla 
+##                  2.172086e-02                  4.346173e-02 
+##           proportion.Srinagar proportion.Thiruvananthapuram 
+##                  4.348841e-02                  4.346173e-02 
+## 
+## $State
+##                            n                        nmiss 
+##                 1.499020e+05                 0.000000e+00 
+##                        freq1          freq.Andhra Pradesh 
+##                 4.400000e+01                 6.518000e+03 
+##       freq.Arunachal Pradesh                   freq.Assam 
+##                 6.514000e+03                 6.513000e+03 
+##                   freq.Bihar            freq.Chhattisgarh 
+##                 6.514000e+03                 6.518000e+03 
+##                     freq.Goa                 freq.Gujarat 
+##                 6.517000e+03                 6.518000e+03 
+##                 freq.Haryana        freq.Himachal Pradesh 
+##                 9.776000e+03                 6.515000e+03 
+##               freq.Jharkhand                      freq.JK 
+##                 6.519000e+03                 1.303200e+04 
+##               freq.Karnataka                  freq.Kerala 
+##                 6.510000e+03                 6.515000e+03 
+##          freq.Madhya Pradesh             freq.Maharashtra 
+##                 6.515000e+03                 3.260000e+03 
+##                 freq.Manipur               freq.Meghalaya 
+##                 3.257000e+03                 3.256000e+03 
+##                 freq.Mizoram                freq.Nagaland 
+##                 6.521000e+03                 6.516000e+03 
+##          freq.Odisha(Orissa)               freq.Rajasthan 
+##                 3.259000e+03                 3.255000e+03 
+##                  freq.Sikkim              freq.Tamil Nadu 
+##                 3.258000e+03                 3.257000e+03 
+##                 freq.Tripura           freq.Uttar Pradesh 
+##                 3.257000e+03                 3.256000e+03 
+##             freq.Uttarakhand             freq.West Bengal 
+##                 3.254000e+03                 3.258000e+03 
+##                  proportion1    proportion.Andhra Pradesh 
+##                 2.935251e-04                 4.348174e-02 
+## proportion.Arunachal Pradesh             proportion.Assam 
+##                 4.345506e-02                 4.344839e-02 
+##             proportion.Bihar      proportion.Chhattisgarh 
+##                 4.345506e-02                 4.348174e-02 
+##               proportion.Goa           proportion.Gujarat 
+##                 4.347507e-02                 4.348174e-02 
+##           proportion.Haryana  proportion.Himachal Pradesh 
+##                 6.521594e-02                 4.346173e-02 
+##         proportion.Jharkhand                proportion.JK 
+##                 4.348841e-02                 8.693680e-02 
+##         proportion.Karnataka            proportion.Kerala 
+##                 4.342837e-02                 4.346173e-02 
+##    proportion.Madhya Pradesh       proportion.Maharashtra 
+##                 4.346173e-02                 2.174754e-02 
+##           proportion.Manipur         proportion.Meghalaya 
+##                 2.172753e-02                 2.172086e-02 
+##           proportion.Mizoram          proportion.Nagaland 
+##                 4.350175e-02                 4.346840e-02 
+##    proportion.Odisha(Orissa)         proportion.Rajasthan 
+##                 2.174087e-02                 2.171419e-02 
+##            proportion.Sikkim        proportion.Tamil Nadu 
+##                 2.173420e-02                 2.172753e-02 
+##           proportion.Tripura     proportion.Uttar Pradesh 
+##                 2.172753e-02                 2.172086e-02 
+##       proportion.Uttarakhand       proportion.West Bengal 
+##                 2.170752e-02                 2.173420e-02 
+## 
+## $quantile
+##                 n             nmiss         freq.0-20        freq.20-40 
+##      1.499020e+05      3.134300e+04      2.270400e+04      2.374100e+04 
+##        freq.40-60        freq.60-80       freq.80-100   proportion.0-20 
+##      2.565700e+04      2.242800e+04      2.402900e+04      1.914996e-01 
+##  proportion.20-40  proportion.40-60  proportion.60-80 proportion.80-100 
+##      2.002463e-01      2.164070e-01      1.891716e-01      2.026755e-01
+PERFORMING UNIVARIATE ANALYSIS ON DATA SET
+
+#Univariate Analysis
+#removing observations with duplicated customerID(if any)
+customer_360_1<-customer_360[unique(customer_360$ID),]
+
+#Unique IDs
+
+#converting data type
+customer_360_1$Gender<-as.factor(customer_360_1$Gender)
+summary(customer_360_1$Gender)
+##     0     1  NA's 
+## 93597 56163   142
+customer_360_1$SeriousDlqin2yrs<-as.factor(customer_360_1$SeriousDlqin2yrs)
+summary(customer_360_1$SeriousDlqin2yrs)
+##      0      1   NA's 
+## 139791  10013     98
+customer_360_1$Own_House<-as.factor(customer_360_1$Own_House)
+summary(customer_360_1$Own_House)
+##     0     1  NA's 
+## 89956 59804   142
+customer_360_1$State<-as.factor(customer_360_1$State)
+summary(customer_360_1$State)
+##                      Andhra Pradesh Arunachal Pradesh             Assam 
+##                44              6513              6506              6506 
+##             Bihar      Chhattisgarh               Goa           Gujarat 
+##              6512              6514              6514              6515 
+##           Haryana  Himachal Pradesh         Jharkhand                JK 
+##              9765              6508              6516             13027 
+##         Karnataka            Kerala    Madhya Pradesh       Maharashtra 
+##              6508              6512              6511              3259 
+##           Manipur         Meghalaya           Mizoram          Nagaland 
+##              3252              3252              6517              6512 
+##    Odisha(Orissa)         Rajasthan            Sikkim        Tamil Nadu 
+##              3257              3253              3258              3254 
+##           Tripura     Uttar Pradesh       Uttarakhand       West Bengal 
+##              3257              3255              3251              3256 
+##              NA's 
+##                98
+customer_360_1$Income_segment<-as.factor(customer_360_1$Income_segment)
+summary(customer_360_1$Income_segment)
+##     High value customers      Low Value customers   Medium Value customers 
+##                    22411                    23731                    25637 
+##          Prime Customers Very Low Value customers                     NA's 
+##                    24015                    22690                    31418
+customer_360_1$Life_stage_Segment<-as.factor(customer_360_1$Life_stage_Segment)
+summary(customer_360_1$Life_stage_Segment)
+## Married_with_youngKids            Pre_retired                Retired 
+##                  29497                  69740                  44985 
+##                Student     UnMarried_employed                   NA's 
+##                    181                   4927                    572
+customer_360_1$City=as.factor(customer_360_1$City)
+summary(customer_360_1$City)
+##                              Agartala             Aizawl 
+##                 44               3257               6517 
+##          Bangalore             Bhopal        Bhubaneswar 
+##               6508               6511               3257 
+##         Chandigarh            Chennai           Dehradun 
+##               9765               3254               3251 
+##             Dispur        Gandhinagar            Gangtok 
+##               6506               6515               3258 
+##          Hyderabad             Imphal           Itanagar 
+##               6513               3252               6506 
+##             Jaipur              Jammu             Kohima 
+##               3253               6511               6512 
+##            Kolkata            Lucknow             Mumbai 
+##               3256               3255               3259 
+##             Panjim              Patna             Raipur 
+##               6514               6512               6514 
+##             Ranchi           Shillong             Shimla 
+##               6516               3252               6508 
+##           Srinagar Thiruvananthapuram               NA's 
+##               6516               6512                 98
+customer_360_1$State=as.factor(customer_360_1$State)
+summary(customer_360_1$State)
+##                      Andhra Pradesh Arunachal Pradesh             Assam 
+##                44              6513              6506              6506 
+##             Bihar      Chhattisgarh               Goa           Gujarat 
+##              6512              6514              6514              6515 
+##           Haryana  Himachal Pradesh         Jharkhand                JK 
+##              9765              6508              6516             13027 
+##         Karnataka            Kerala    Madhya Pradesh       Maharashtra 
+##              6508              6512              6511              3259 
+##           Manipur         Meghalaya           Mizoram          Nagaland 
+##              3252              3252              6517              6512 
+##    Odisha(Orissa)         Rajasthan            Sikkim        Tamil Nadu 
+##              3257              3253              3258              3254 
+##           Tripura     Uttar Pradesh       Uttarakhand       West Bengal 
+##              3257              3255              3251              3256 
+##              NA's 
+##                98
+customer_360_1$quantile=as.factor(customer_360_1$quantile)
+summary(customer_360_1$quantile)
+##   0-20  20-40  40-60  60-80 80-100   NA's 
+##  22690  23731  25637  22411  24015  31418
+#replacing missing values with mean for numerical variables
+customer_360_1[,num_var] <- apply(data.frame(customer_360_1[,num_var]), 2, function(x){x <- replace(x, is.na(x), mean(x, na.rm=TRUE))})
+
+summary(customer_360_1[,num_var])
+##  RevolvingUtilization No_of_30_59_DPD     DebtRatio        MonthlyIncome  
+##  Min.   :    0.00     Min.   : 0.0000   Min.   :     0.0   Min.   :    2  
+##  1st Qu.:    0.03     1st Qu.: 0.0000   1st Qu.:     0.2   1st Qu.: 5849  
+##  Median :    0.15     Median : 0.0000   Median :     0.4   Median : 7230  
+##  Mean   :    6.05     Mean   : 0.4212   Mean   :   353.0   Mean   : 7230  
+##  3rd Qu.:    0.56     3rd Qu.: 0.0000   3rd Qu.:     0.9   3rd Qu.: 9288  
+##  Max.   :50708.00     Max.   :98.0000   Max.   :329664.0   Max.   :13591  
+##  No_Of_OpenCreditLines  No_of_90_DPD     No_of_RealEstateLoans
+##  Min.   : 0.000        Min.   : 0.0000   Min.   : 0.000       
+##  1st Qu.: 5.000        1st Qu.: 0.0000   1st Qu.: 0.000       
+##  Median : 8.000        Median : 0.0000   Median : 1.000       
+##  Mean   : 8.452        Mean   : 0.2662   Mean   : 1.018       
+##  3rd Qu.:11.000        3rd Qu.: 0.0000   3rd Qu.: 2.000       
+##  Max.   :58.000        Max.   :98.0000   Max.   :54.000       
+##  No_of_60_89_DPD        age        NumberOfDependents No_Years_address
+##  Min.   : 0.0000   Min.   :  0.0   Min.   : 2.000     Min.   :1.000   
+##  1st Qu.: 0.0000   1st Qu.: 41.0   1st Qu.: 2.000     1st Qu.:1.000   
+##  Median : 0.0000   Median : 52.0   Median : 2.000     Median :2.000   
+##  Mean   : 0.2406   Mean   : 52.3   Mean   : 3.298     Mean   :2.002   
+##  3rd Qu.: 0.0000   3rd Qu.: 63.0   3rd Qu.: 3.000     3rd Qu.:3.000   
+##  Max.   :98.0000   Max.   :109.0   Max.   :14.000     Max.   :3.000
+#replacing missing values with max proportion for categorical variables
+customer_360_1[,cat_var] <- apply(data.frame(customer_360_1[,cat_var]), 2, function(x){x <- replace(x, is.na(x), x[which.max(prop.table(table(x)))])})
+
+summary(customer_360_1[,cat_var])
+##  SeriousDlqin2yrs      Gender          Martial_Status    
+##  Length:149902      Length:149902      Length:149902     
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##   Own_House         Income_segment     Life_stage_Segment
+##  Length:149902      Length:149902      Length:149902     
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##      City              State             quantile        
+##  Length:149902      Length:149902      Length:149902     
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character
+GETTING THE OUTLIERS USING MEAN & Std AND CAPPING AND FLOORING THE OUTLIERS
+
+#applying the function on data
+my_num_data=data.frame(t(apply(customer_360_1[num_var],2,var_Summ)))
+summary(my_num_data)
+##        n              nmiss        mean               std          
+##  Min.   :149902   Min.   :0   Min.   :   0.241   Min.   :   0.816  
+##  1st Qu.:149902   1st Qu.:0   1st Qu.:   0.720   1st Qu.:   3.113  
+##  Median :149902   Median :0   Median :   3.298   Median :   4.194  
+##  Mean   :149902   Mean   :0   Mean   : 696.078   Mean   : 500.227  
+##  3rd Qu.:149902   3rd Qu.:0   3rd Qu.:  30.374   3rd Qu.: 132.284  
+##  Max.   :149902   Max.   :0   Max.   :7229.823   Max.   :3178.049  
+##       var                min             p1.1.            p5.5.         
+##  Min.   :       1   Min.   :0.0000   Min.   : 0.000   Min.   :  0.0000  
+##  1st Qu.:      11   1st Qu.:0.0000   1st Qu.: 0.000   1st Qu.:  0.0000  
+##  Median :      18   Median :0.0000   Median : 0.000   Median :  0.0043  
+##  Mean   : 1301542   Mean   :0.4545   Mean   : 2.636   Mean   : 62.0004  
+##  3rd Qu.:   31310   3rd Qu.:0.5000   3rd Qu.: 1.500   3rd Qu.:  2.0000  
+##  Max.   :10099993   Max.   :2.0000   Max.   :24.000   Max.   :648.0000  
+##     p10.10.              q1.25.             q2.50.        
+##  Min.   :   0.0000   Min.   :   0.000   Min.   :   0.000  
+##  1st Qu.:   0.0000   1st Qu.:   0.000   1st Qu.:   0.077  
+##  Median :   0.0309   Median :   0.175   Median :   1.000  
+##  Mean   : 203.7304   Mean   : 536.200   Mean   : 663.213  
+##  3rd Qu.:   2.5000   3rd Qu.:   3.500   3rd Qu.:   5.000  
+##  Max.   :2202.0000   Max.   :5849.000   Max.   :7229.823  
+##      q3.75.           p90.90.             p95.95.       
+##  Min.   :   0.00   Min.   :    0.000   Min.   :    1.0  
+##  1st Qu.:   0.28   1st Qu.:    0.991   1st Qu.:    1.5  
+##  Median :   2.00   Median :    3.000   Median :    3.0  
+##  Mean   : 851.95   Mean   : 1166.907   Mean   : 1355.5  
+##  3rd Qu.:   7.00   3rd Qu.:   43.500   3rd Qu.:   48.0  
+##  Max.   :9288.00   Max.   :11471.000   Max.   :12349.0  
+##     p99.99.               max          outlier.99.    
+##  Min.   :    1.108   Min.   :     3   Min.   :0.0000  
+##  1st Qu.:    3.000   1st Qu.:    56   1st Qu.:1.0000  
+##  Median :    4.000   Median :    98   Median :1.0000  
+##  Mean   : 1668.645   Mean   : 35863   Mean   :0.9091  
+##  3rd Qu.:   55.500   3rd Qu.:  6850   3rd Qu.:1.0000  
+##  Max.   :13239.000   Max.   :329664   Max.   :1.0000
+my_cat_data=t(data.frame(t(apply(customer_360_1[cat_var],2,var_Summ))))
+
+outlier_count=sum(my_num_data$outlier.99.)
+outlier_count
+## [1] 10
+GETTING RELATION BETWEEN VARIABLES
+
+#Summary table
+#require(tables)
+#tabular(City*Gender~((SeriousDlqin2yrs*mean)+(NumberOfDependents*mean)+(DebtRatio*mean)+(MonthlyIncome*min+max)+(age*min+max)),data=na.omit(customer_360_1))
+
+
+#Finding the relationships
+##Numerical Variables (Correlation)
+cor_mat=cor(customer_360_1[c(3,4,5,6,7,8,9,10,12,14,16)])
+cor_mat1=cor(customer_360_1[num_var])
+cor_mat1
+##                       RevolvingUtilization No_of_30_59_DPD    DebtRatio
+## RevolvingUtilization           1.000000000    -0.001310561  0.003969537
+## No_of_30_59_DPD               -0.001310561     1.000000000 -0.006538584
+## DebtRatio                      0.003969537    -0.006538584  1.000000000
+## MonthlyIncome                 -0.004629036    -0.010071839 -0.023441680
+## No_Of_OpenCreditLines         -0.011276199    -0.055378538  0.049590152
+## No_of_90_DPD                  -0.001059956     0.983630910 -0.008315571
+## No_of_RealEstateLoans          0.006203297    -0.030551903  0.120064730
+## No_of_60_89_DPD               -0.001046613     0.987028963 -0.007533368
+## age                           -0.005925654    -0.062331229  0.024200891
+## NumberOfDependents             0.002350138    -0.001929807 -0.032917779
+## No_Years_address              -0.002093109    -0.002995748  0.001315270
+##                       MonthlyIncome No_Of_OpenCreditLines No_of_90_DPD
+## RevolvingUtilization   -0.004629036         -0.0112761989 -0.001059956
+## No_of_30_59_DPD        -0.010071839         -0.0553785381  0.983630910
+## DebtRatio              -0.023441680          0.0495901516 -0.008315571
+## MonthlyIncome           1.000000000          0.0287302806 -0.012210923
+## No_Of_OpenCreditLines   0.028730281          1.0000000000 -0.080010565
+## No_of_90_DPD           -0.012210923         -0.0800105645  1.000000000
+## No_of_RealEstateLoans   0.010611900          0.4339754716 -0.045203750
+## No_of_60_89_DPD        -0.011705028         -0.0711258123  0.992805896
+## age                    -0.006567530          0.1476322671 -0.060315762
+## NumberOfDependents      0.014358809          0.0568082771 -0.008744444
+## No_Years_address       -0.001908910          0.0000753457 -0.003581984
+##                       No_of_RealEstateLoans No_of_60_89_DPD          age
+## RevolvingUtilization            0.006203297    -0.001046613 -0.005925654
+## No_of_30_59_DPD                -0.030551903     0.987028963 -0.062331229
+## DebtRatio                       0.120064730    -0.007533368  0.024200891
+## MonthlyIncome                   0.010611900    -0.011705028 -0.006567530
+## No_Of_OpenCreditLines           0.433975472    -0.071125812  0.147632267
+## No_of_90_DPD                   -0.045203750     0.992805896 -0.060315762
+## No_of_RealEstateLoans           1.000000000    -0.039733329  0.033118118
+## No_of_60_89_DPD                -0.039733329     1.000000000 -0.056467080
+## age                             0.033118118    -0.056467080  1.000000000
+## NumberOfDependents              0.119067894    -0.009332128 -0.212835450
+## No_Years_address               -0.002276590    -0.003691821 -0.001022278
+##                       NumberOfDependents No_Years_address
+## RevolvingUtilization         0.002350138    -0.0020931089
+## No_of_30_59_DPD             -0.001929807    -0.0029957477
+## DebtRatio                   -0.032917779     0.0013152698
+## MonthlyIncome                0.014358809    -0.0019089096
+## No_Of_OpenCreditLines        0.056808277     0.0000753457
+## No_of_90_DPD                -0.008744444    -0.0035819842
+## No_of_RealEstateLoans        0.119067894    -0.0022765896
+## No_of_60_89_DPD             -0.009332128    -0.0036918209
+## age                         -0.212835450    -0.0010222780
+## NumberOfDependents           1.000000000    -0.0025740768
+## No_Years_address            -0.002574077     1.0000000000
+##Categorical Variable (Chi-square)
+mydata2<-xtabs(~SeriousDlqin2yrs+Gender,data=customer_360_1)
+require(stats)
+chisq.test(mydata2)
+## 
+##  Pearson's Chi-squared test with Yates' continuity correction
+## 
+## data:  mydata2
+## X-squared = 0.37213, df = 1, p-value = 0.5418
+mydata2<-xtabs(~SeriousDlqin2yrs+Martial_Status,data=customer_360_1)
+chisq.test(mydata2)
+## 
+##  Pearson's Chi-squared test with Yates' continuity correction
+## 
+## data:  mydata2
+## X-squared = 3.6182, df = 1, p-value = 0.05715
+mydata2<-xtabs(~Income_segment+Life_stage_Segment,data=customer_360_1)
+chisq.test(mydata2)
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  mydata2
+## X-squared = 3443.3, df = 16, p-value < 2.2e-16
+#install.packages("psych")
+#require(psych)
+#describe(customer_360_1[,num_var])
+#describe
+#describeBy(customer_360_1[,num_var])
